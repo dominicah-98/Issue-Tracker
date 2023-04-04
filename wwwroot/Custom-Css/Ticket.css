@@ -1,0 +1,307 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    /*--font: 'Roboto', sans-serif;*/
+    --font: 'Noto Sans', sans-serif;
+    --font-size: 12px;
+    --black: #333333;
+    --white: #FFFAFA;
+    --orange-light: #feb272;
+    --orange: #fd9843;
+    --orange-dark: #fd7e14;
+    --blue-light: #6ea8fe;
+    --blue: #3d8bfd;
+    --blue-dark: #0A58CA;
+    --blue-darkest: #052C65;
+    --blue-lightest: #f4f6f7;
+    --indigo-light: #A370F7;
+    --indigo: #8540F5;
+    --indigo-dark: #3D0A91;
+    --grey-light: #CED4DA;
+    --grey: #ADB5BD;
+    --grey-dark: #6C757D;
+    --red-light: #E35D6A;
+    --red: #DC3545;
+    --red-dark: #B02A37;
+    /*--teal-light: #79DFC1;*/
+    --teal-light: #D2F4EA;
+    --teal: #20C997;
+    --teal-dark: #13795B;
+    --purple: #CD1FB3;
+    --purple-light: #EA71D8;
+    --purple-dark: #A0188C;
+    --primary: #1A4568;
+    --primary-dark: #153855;
+    --primary-light: #52728B;
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+*:focus {
+    outline: none;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    color: var(--black);
+    font-family: var(--font);
+    font-size: var(--font-size);
+    background-color: var(--blue-lightest);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: inherit;
+    }
+
+    input[type=text]:focus,
+    input[type=password]:focus,
+    input[type=email]:focus,
+    select,
+    button,
+    a:focus,
+    .btn:focus,
+    .btn-primary:focus,
+    .btn-outline-primary:focus,
+    input[type=file]:focus,
+    textarea:focus,
+    input[type=checkbox]:focus,
+    input[type=number]:focus,
+    input[type=date]:focus,
+    input[type=time]:focus,
+    input[type=submit]:focus,
+    input[type=button]:focus,
+    .form-check-input:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(168, 168, 168);
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #888;
+    }
+
+
+.bg-blue-light{
+    background-color:var(--blue-lightest);
+}
+
+.btn {
+    font-size: var(--font-size);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    /* color: var(--black); */
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border: 1px solid var(--primary-dark);
+}
+
+.text-primary{
+    color: var(--primary) !important;
+    transition: all 0.2s;
+}
+
+.text-warning{
+    color: var(--orange) !important;
+}
+.text-success{
+    color: var(--teal) !important;
+}
+.text-secondary{
+    color: var(--grey) !important;
+}
+.text-primary.pointer:hover{
+    color: var(--primary-dark) !important;
+    transition: 0.2s ease-in-out
+}
+
+.text-indigo{
+    color:var(--indigo);
+}
+i{
+    cursor:pointer;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.form-control, .form-select {
+    /*padding-bottom: 5px !important;*/
+    padding-left: 3px !important;
+    padding-right: 0px !important;
+    border: 1.5px solid lightgrey !important;
+    /*border-bottom: 1.5px solid lightgrey !important;
+    border-radius: 0px !important;*/
+    font-size: var(--font-size);
+    transition: all 0.2s;
+}
+.form-check-input:focus-visible {
+    border-color: var(--primary) !important;
+    transition: 0.2s linear;
+}
+
+.form-control:focus-visible, .form-select:focus-visible {
+    border: 1.5px solid var(--primary) !important;
+    transition: 0.2s linear;
+    transform-origin: center center;
+}
+
+.form-control::placeholder {
+    /* color: var(--black); */
+    color: #757575;
+}
+
+.form-control:hover, .form-select:hover {
+    border: 1.5px solid var(--primary-light) !important;
+    transition: 0.2s linear;
+}
+
+.form-switch .form-check-input {
+    width: 3em !important;
+    height: 1.5em !important;
+}
+
+textarea {
+    resize: none;
+}
+
+.ticket-card {
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    /*cursor: pointer;*/
+    border: 1px solid var(--grey-light);
+    transition: all 0.2s;
+}
+.ticket-card-icon {
+    position: absolute;
+    bottom: -15px;
+    right: -13px;
+    font-size: 70px;
+    color: var(--grey);
+    opacity: 0.07;
+    /*transform: rotate(20deg);*/
+}
+.bi::before {
+    vertical-align: -1.125em !important;
+}
+
+.ticket-card:hover {
+    /*border: 1px solid var(--primary);*/
+    box-shadow: 0px 2px 26px -11px rgba(0,0,0,1);
+    border: none;
+    border-bottom: 4px solid var(--primary);
+    /*border-style: inset;*/
+    margin-top: -2px;
+    transition: 0.2s ease-in-out;
+}
+
+/*Calendar-Icon*/
+.calendar-icon {
+    position: relative;
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+.calendar-icon:before {
+    content: "\f073"; /* this is your text. You can also use UTF-8 character codes as I do here */
+    /*font-family: FontAwesome;*/
+    font: var(--fa-font-regular);
+    right: 10px;
+    position: absolute;
+    top: 50%;
+    transform:translateY(-50%);
+    color: var(--primary);
+    font-size: 16px;
+}
+
+/*Tooltip Customization*/
+.tooltip-custom {
+    position: absolute;
+    /* vertically center */
+    top: 50%;
+    transform: translateY(-40%);
+    /* move to right */
+    left: 100%;
+    margin-left: 15px; /* and add a small left margin */
+    font-size: 12px;
+    /* basic styles */
+    width: 200px;
+    padding: 8px;
+    border-radius: 10px;
+    background: var(--grey-light);
+    border: 2px solid var(--primary);
+    color: var(--black);
+    text-align: center;
+    opacity: 0;
+    display: none; /* hide by default */
+    transition: 0.3s all;
+}
+
+
+    .tooltip-custom:after {
+        content: "";
+        position: absolute;
+        /* position tooltip correctly */
+        right: 100%;
+        margin-left: -5px;
+        /* vertically center */
+        top: 50%;
+        transform: translateY(-50%);
+        /* the arrow */
+        border: 8px solid var(--grey-light);
+        border-color: transparent var(--grey-light) transparent transparent;
+        display: none;
+    }
+
+    .tooltip-custom::before {
+        content: "";
+        position: absolute;
+        /* position tooltip correctly */
+        right: 101%;
+        margin-left: -5px;
+        /* vertically center */
+        top: 50%;
+        transform: translateY(-50%);
+        /* the arrow */
+        border: 9px solid var(--primary);
+        border-color: transparent var(--primary) transparent transparent;
+        display: none;
+    }
+
+#divIssue:hover .tooltip-custom, #divIssue:hover .tooltip-custom:after, #divIssue:hover .tooltip-custom::before {
+    display: block;
+    opacity: 1;
+    transition: 0.3s ease;
+}

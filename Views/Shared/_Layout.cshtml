@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>QuickDesk | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="~/JQuery/jquery-3.6.1.js"></script>
+    <link href="~/bootstrap-5.2.3-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/bootstrap-5.2.3-dist/js/bootstrap.min.js"></script>
+    @*Fontawesome Icon*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @*<link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />*@
+    @*Bootstrap Icon*@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="~/JQuery-ui-1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
+    <script src="~/ProjectJS/Logout.js"></script>
+    @*<link href="~/Custom-Css/Ticket.css" rel="stylesheet" />*@
+    <link href="~/Custom-Css/Ticket.css" rel="stylesheet" />
+    <script src="~/Custom-js/style.js"></script>
+    @*Chart js*@
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js" integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row bg-white p-3 shadow-sm border-bottom sticky-lg-top">
+            <div class="col-md-4">
+                @*<h2>QUICKDESK</h2>*@
+                <img src="~/images/logo2.png" />
+            </div>
+            <div class="col-md-8 d-flex justify-content-end align-items-center">
+                <div class="d-flex justify-content-end align-items-center pe-2">
+                    <label class="d-block fw-bold" id="lblSwitchUser">User</label>
+                    <div class="form-check form-switch mx-1">
+                        <input class="form-check-input" type="checkbox" id="chkSwitch">
+                    </div>
+                    <label class="d-block small" id="lblSwitch"></label>
+                </div>
+                <div class="ps-2 border-start">
+                    <label id="lblEmpname" class="fw-bold">@Context.Session.GetString("Empname")</label>
+                    <label id="lblEmpno" class="fw-bold">(@Context.Session.GetString("Empno"))</label>
+                    @*<input type="button" id="btnLogout" class="btn btn-sm btn-warning" value="Logout" />*@
+                    <i class="fa-solid fa-right-from-bracket text-danger fa-xl ms-2" id="btnLogout"></i>
+                </div>
+            </div>
+        </div>
+        @*<div class="row justify-content-center mt-5">
+        <div class="col-md-11">
+            @RenderBody()
+        </div>*@
+    <div class="container-fluid p-3 mt-3">
+        <div class="row">
+            <div class="col-md-12">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div>
+            <input type="hidden" id="hdEmail" value="@Context.Session.GetString("Email")" />
+            <input type="hidden" id="hdEmpno" value="@Context.Session.GetString("Empno")" />
+            <input type="hidden" id="hdEmpname" value="@Context.Session.GetString("Empname")" />
+            <input type="hidden" id="hdEmpType" value="" />
+            <input type="hidden" id="hdDashType" value="" />
+        </div>
+    </footer>
+    </div>
+</body>
+</html>
+
+

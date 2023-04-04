@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\ProjectJS\Login.js" />
+    <Content Remove="wwwroot\ProjectJS\Logout.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-grid.rtl.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-grid.rtl.min.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-reboot.rtl.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-reboot.rtl.min.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-utilities.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-utilities.min.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-utilities.rtl.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap-utilities.rtl.min.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap.rtl.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\css\bootstrap.rtl.min.css.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.esm.js" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.esm.js.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.esm.min.js" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.esm.min.js.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.js" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\bootstrap-5.2.3-dist\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\ProjectJS\Logout.js" />
+    <None Include="wwwroot\ProjectJS\Login.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\TicketImg\" />
+    <Folder Include="wwwroot\assets\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.3" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

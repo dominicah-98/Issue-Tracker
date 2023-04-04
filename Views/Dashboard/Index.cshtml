@@ -1,0 +1,543 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="d-flex align-items-center justify-content-between">
+    <h5 class="display-6">Dashboard</h5>
+    <button class="btn btn-primary rounded-pill" id="btnAddticket"><i class="fa-solid fa-plus me-2"></i>New Ticket</button>
+</div>
+<hr />
+@*Cards*@
+@*<div class="container-fluid px-0">
+    
+</div>*@
+
+<div class="container-fluid px-0">
+    <div class="row mt-3 g-3">
+        <div class="col-md-6 mt-md-0 mt-2">
+            @*Cards User*@
+            <div class="row gx-2" id="userDashCardTable">
+                <div class="col-md-3 mt-md-0 mt-2" id="cardAll">
+                    <div class="rounded p-2 ticket-card pointer" id="btnAllTicket">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm" id="lblAllTicket">Tickets Generated</span>
+                            <span class="d-block fs-2 text-primary" id="cardTotalTicket"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-md-0 mt-2" id="cardOpen">
+                    <div class="ticket-card rounded p-2 pointer" id="btnOpenTicketList">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm" id="lblCard2">Open Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardOpenTicket"></span>
+                        </div>
+                        @*<i class="lni lni-ticket ticket-card-icon"></i>*@
+                        <i class="bi bi-postcard-fill ticket-card-icon"></i>
+                    </div>
+                </div>
+                @*<div class="col-md-3 mt-md-0 mt-2 d-none" id="cardAlloc">
+                    <div class="ticket-card rounded p-2 pointer" id="btnAllocTicketList">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm" id="lblAllocTickets">Allocated Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardAllocatedTicket"></span>
+                        </div>
+                        <i class="fa-solid fa-clipboard-list ticket-card-icon"></i>
+                    </div>
+                </div>*@
+                <div class="col-md-3 mt-md-0 mt-2" id="cardSolved">
+                    <div class="ticket-card rounded p-2 pointer" id="btnSolvedTicketList">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm">Solved Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardSolvedTicket"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-md-0 mt-2" id="cardClosed">
+                    <div class="ticket-card rounded p-2 pointer" id="btnClosedTicketList">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm">Closed Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardClosedTicket"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-3">
+                    @*Table 1*@
+                    <div class="bg-white rounded px-2 pt-2">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="d-block lead fs-5" id="lblRecentActivities">Recent Tickets</span>
+                            <span class="text-primary fs-6 pointer" data-type="all" id="btnAllTicketList">See All <i class="fa-solid fa-angle-right ms-2"></i></span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sl no.</th>
+                                        <th>Ticket No.</th>
+                                        @*<th>Raised By</th>*@
+                                        <th>Raised Date</th>
+                                        <th>Application</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblTicketList">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Cards Developer*@
+            <div class="row gx-2 d-none" id="devDashCardTable">
+                <div class="col-md-3 mt-md-0 mt-2" id="cardAllDev">
+                    <div class="rounded p-2 ticket-card pointer" id="btnAllTicketDev">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm" id="lblAllTicketDev">Total Allocated</span>
+                            <span class="d-block fs-2 text-primary" id="cardTotalTicketDev"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-md-0 mt-2" id="cardAlloc">
+                    <div class="ticket-card rounded p-2 pointer" id="btnAllocTicketDev">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm" id="lblAllocTickets">Currently Allocated</span>
+                            <span class="d-block fs-2 text-primary" id="cardAllocatedTicketDev"></span>
+                        </div>
+                        <i class="fa-solid fa-clipboard-list ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-md-0 mt-2" id="cardSolved">
+                    <div class="ticket-card rounded p-2 pointer" id="btnSolvedTicketDev">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm">Solved Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardSolvedTicketDev"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-md-0 mt-2" id="cardClosed">
+                    <div class="ticket-card rounded p-2 pointer" id="btnClosedTicketDev">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm">Closed Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardClosedTicketDev"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-3">
+                    @*Table 1*@
+                    <div class="bg-white rounded px-2 pt-2">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="d-block lead fs-5">Recently Allocated</span>
+                            <span class="text-primary fs-6 pointer" data-type="all" id="btnDevAllTicketList">See All <i class="fa-solid fa-angle-right ms-2"></i></span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sl no.</th>
+                                        @*<th style="width:13%">Ticket No.</th>*@
+                                        <th>Ticket No.</th>
+                                        <th>Allocation Date</th>
+                                        <th>Application</th>
+                                        <th>Priority</th>
+                                        <th>Assigned By</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblAssignedList">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Cards Admin*@
+            <div class="row gx-2 d-none" id="adminDashCardTable">
+                <div class="col-md-3 mt-md-0 mt-2" id="cardAll">
+                    <div class="rounded p-2 ticket-card pointer" id="btnAllTicketadm">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm" id="lblAllTicket">Tickets Generated</span>
+                            <span class="d-block fs-2 text-primary" id="cardTotalTicket"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-md-0 mt-2" id="cardOpen">
+                    <div class="ticket-card rounded p-2 pointer" id="btnOpenTicketListadm">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm" id="lblCard2">Open Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardOpenTicket"></span>
+                        </div>
+                        <i class="lni lni-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                @*<div class="col-md-3 mt-md-0 mt-2 d-none" id="cardAlloc">
+                    <div class="ticket-card rounded p-2 pointer" id="btnAllocTicketList">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm" id="lblAllocTickets">Allocated Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardAllocatedTicket"></span>
+                        </div>
+                        <i class="fa-solid fa-clipboard-list ticket-card-icon"></i>
+                    </div>
+                </div>*@
+                <div class="col-md-3 mt-md-0 mt-2" id="cardSolved">
+                    <div class="ticket-card rounded p-2 pointer" id="btnSolvedTicketListadm">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm">Solved Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardSolvedTicket"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-md-0 mt-2" id="cardClosed">
+                    <div class="ticket-card rounded p-2 pointer" id="btnClosedTicketListadm">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lead fs-6 w-25 d-block lh-sm">Closed Tickets</span>
+                            <span class="d-block fs-2 text-primary" id="cardClosedTicket"></span>
+                        </div>
+                        <i class="fa-solid fa-ticket ticket-card-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-3">
+                    @*Table 1*@
+                    <div class="bg-white rounded px-2 pt-2">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="d-block lead fs-5" id="lblRecentActivities">Recent Tickets</span>
+                            <span class="text-primary fs-6 pointer" data-type="all" id="btnAllTicketListAdm">See All <i class="fa-solid fa-angle-right ms-2"></i></span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover small">
+                                <thead>
+                                    <tr>
+                                        <th>Sl no.</th>
+                                        <th>Raised By</th>
+                                        <th>Ticket No.</th>
+                                        <th>Raised Date</th>
+                                        <th>Application</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblTicketList">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*Chart*@
+        <div class="col-md-6 mt-md-0 mt-2">
+            <div class="bg-white p-3 rounded" id="divBarChart">
+                @*<canvas id="myChart"></canvas>*@
+            </div>
+        </div>
+        @*Table 2*@
+        <div class="col-md-6 mt-3 d-none" id="divDevActivities">
+            <div class="bg-white rounded p-3">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <span class="d-block lead fs-5">Recently Allocated</span>
+                    <span class="text-primary fs-6 pointer" id="btnDevAllcTicketList">See All <i class="fa-solid fa-angle-right ms-2"></i></span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sl no.</th>
+                                <th style="width:13%">Ticket No.</th>
+                                <th>Allocation Date</th>
+                                <th>Application</th>
+                                <th>Priority</th>
+                                <th>Assigned To</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblAssignedListAdm">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+         @*Chart2*@
+        <div class="col-md-6 mt-3 d-none" id="admChart2">
+            <div class="bg-white p-3 rounded" id="divBarChart">
+                @*<canvas id="myChart"></canvas>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Ticket Addition*@
+<div class="modal" tabindex="-1" role="dialog" id="modalAddticket">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h5 class="modal-title">NEW TICKET</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>No</label>
+                        <input type="text" class="form-control form-control-sm" id="txtNo" />
+                        <input type="hidden" id="hdIDTicket" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Priority</label>
+                        <select id="ddlPriority" class="form-select form-select-sm"></select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Application</label>
+                        <select id="ddlApplication" class="form-select form-select-sm"></select>
+                        @*<div class="calendar-icon w-100">
+                            <input type="text" class="form-control form-control-sm" />
+                        </div>*@
+                    </div>
+                    <div class="col-md-6">
+                        <label>Category</label>
+                        <select id="ddlCategory" class="form-select  form-select-sm"></select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label>Issue Description (500 words max)</label>
+                        <textarea id="txtIssue" class="form-control form-control-sm" rows="7" maxlength="500"></textarea>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label>Image:</label>
+                        <input type="file" class="form-control form-control-sm" id="txtImage" />
+                    </div>
+                </div>
+                <div class="row mb-3" id="divImage">
+                    <div class="col-md-12">
+                        <img id="Image" src=""  width="50" height="50" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary rounded-pill" id="btnClose">Close</button>
+                <button type="button" class="btn btn-sm btn-primary rounded-pill" id="btnSaveTicket">Save Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Ticket List*@
+<div class="modal" tabindex="-1" role="dialog" id="ModalTicketDetail" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <label class="fw-bold">TICKET LIST</label>
+                    @*<label id="lblHeaderDetail" class="fw-bold"></label>*@
+                    <input type="hidden" id="hdListStatusType" />
+                    <input type="hidden" id="hdListAdmType" />
+                </div>
+            </div>
+            <div class="modal-body" style="height:200px;overflow:scroll">
+                <div class="bg-white rounded p-3">
+                    <table class="table table-sm table-bordered" id="tblTicket">
+                        <thead>
+                            <tr>
+                                <th style="width:15%">Raised By</th>
+                                <th style="width:8%">Raised Date</th>
+                                <th style="width:12%">Ticket No</th>
+                                <th style="width:10%">Category</th>
+                                <th style="width:8%">Priority</th>
+                                <th style="width:12%">Application</th>
+                                <th style="width:20%">Issue</th>
+                                <th style="width:5%">Status</th>
+                                <th style="width:10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblTicketBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<input type="button" id="btnAddQuestion" class="btn btn-sm btn-primary" value="Add Question" />
+                <button type="button" id="btnSaveDetail" class="btn btn-sm btn-primary">Save</button>
+                <button type="button" id="btnPublish" class="btn btn-sm btn-primary">Publish</button>*@
+                <button type="button" id="btnCloseTicketList" class="btn btn-sm btn-secondary rounded-pill">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Ticket Developer List*@
+<div class="modal" tabindex="-1" role="dialog" id="ModalDeveloperList" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <label class="fw-bold">ALLOCATED DEVELOPER LIST</label>
+                    @*<label id="lblHeaderDetail" class="fw-bold"></label>*@
+                    <input type="hidden" id="hdListDevType" />
+                </div>
+            </div>
+            <div class="modal-body" style="height:200px;overflow:scroll">
+                <div class="bg-white rounded p-3">
+                    <table class="table table-sm table-bordered" id="tblDevTicket">
+                        <thead>
+                            <tr>
+                                <th>Sl no.</th>
+                                <th>Ticket No.</th>
+                                <th>Allocation Date</th>
+                                <th>Application</th>
+                                <th>Priority</th>
+                                <th id="tblHdrAssigned">Assigned By</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblAssignedListAll">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<input type="button" id="btnAddQuestion" class="btn btn-sm btn-primary" value="Add Question" />
+                <button type="button" id="btnSaveDetail" class="btn btn-sm btn-primary">Save</button>
+                <button type="button" id="btnPublish" class="btn btn-sm btn-primary">Publish</button>*@
+                <button type="button" id="btnCloseDevTicketList" class="btn btn-sm btn-secondary rounded-pill">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Ticket Details*@
+<div class="modal" tabindex="-1" role="dialog" id="ModalPerTicketDetail" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            @*<div class="modal-header">
+            <div class="modal-title">
+            <label class="fw-bold" id="lblTicketName"></label>
+            <label id="lblHeaderDetail" class="fw-bold"></label>
+            <input type="hidden" id="hdIDTicket" />
+            </div>
+            </div>*@
+            <div class="modal-body bg-light">
+                @*<div class="modal-title">
+                <label class="fw-bold" id="lblTicketName"></label>
+                <label id="lblHeaderDetail" class="fw-bold"></label>
+                <input type="hidden" id="hdIDTicket" />
+                </div>*@
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="card shadow">
+                            <div class="card-header">
+                                <span class="card-title">
+                                    Ticket Details
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <label class="fw-bold d-block" id="lblTicketName"></label>
+                                <input type="hidden" id="hdDetailIDTicket" />
+                                <input type="hidden" id="hdListType" />
+                                <label id="lblTicketDetail" class="d-block"></label>
+                                <img src="" class="rounded img-fluid d-block" alt="" id="imgTicket" style="height:200px;width:200px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card shadow">
+                            <div class="card-header">
+                                Other Ticket Details
+                            </div>
+                            <div class="card-body">
+                                @*<h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>*@
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label class="d-block">Priority</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <label class="" id="lblPriority"></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="d-block">Category:</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <label class="d-block" id="lblCategory"></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="d-block">Status:</label>
+                                    </div>
+                                    <div class="col-6" id="divStatus">
+                                        <label class="d-block" id="lblStatus"></label>
+                                        <select class="form-select form-select-sm d-none" id="ddlChngStatus"></select>
+                                        <input type="text" id="txtStatRemarks" autocomplete="off" placeholder="Enter a Remarks" class="form-control form-control-sm d-none mt-2" maxlength="100" />
+                                    </div>
+                                    <div class="col-2">
+                                        <i class="fa-solid fa-pen-to-square fa-xl text-secondary" id="btnStatusEdit"></i>
+                                        <i class="fa-solid fa-floppy-disk text-primary fa-xl d-none" id="btnSaveStatus"></i>
+                                        <i class="fa-solid fa-xmark text-danger fa-xl ms-1 d-none" id="btnCancelStatus"></i>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="d-block">Status Remarks:</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <label class="d-block" id="lblStatRemarks"></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="d-block">Application:</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <label class="d-block" id="lblApplication"></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="d-block">Raised By:</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <label class="d-block" id="lblRaisedBy"></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="d-block">Raised Date:</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <label class="d-block" id="lblRaisedDate"></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="d-block">Assigned To:</label>
+                                    </div>
+                                    <div class="col-6" id="divAssign">
+                                        <label class="d-block" id="lblAssignedDev"></label>
+                                        <select class="form-select form-select-sm d-none" id="ddlAssignDev"></select>
+                                    </div>
+                                    <div class="col-2">
+                                        <i class="fa-solid fa-pen-to-square fa-xl text-secondary" id="btnAddAssign"></i>
+                                        <i class="fa-solid fa-floppy-disk fa-xl text-primary d-none" id="btnAssignDev"></i>
+                                        <i class="fa-solid fa-xmark text-danger fa-xl ms-1 d-none" id="btnCancelAssign"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @*</div>
+                <div class="row mb-2">
+                    <div class="col-md-2">
+                        <label>Title</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input type="text" id="txtTitle" autocomplete="off" class="form-control form-control-sm" maxlength="100" />
+                    </div>
+                </div>*@
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCloseDetail" class="btn btn-sm btn-secondary rounded-pill">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/ProjectJS/Dashboard.js"></script>
