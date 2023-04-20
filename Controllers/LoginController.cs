@@ -2,10 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using QuickDesk.Models;
 using Newtonsoft.Json;
+using QuickDesk.BLL;
+
 namespace QuickService.Controllers
 {
     public class LoginController : Controller
     {
+        private readonly IConfiguration configuration;
+        private IHostEnvironment environment;
+        public LoginController(IConfiguration _configuration, IHostEnvironment _environment)
+        {
+            configuration = _configuration;
+            environment = _environment;
+        }
         public IActionResult Index()
         {
             return View();
@@ -40,6 +49,15 @@ namespace QuickService.Controllers
                 }
             }
             return new JsonResult(data);
+        }
+
+        [HttpPost]
+        [Route("api/login/ResgisterEmp")]
+        public JsonResult Emp_Register(clsLoginResultInfo info)
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            var result= clsAdminUser.Ticket_EmpReg(conn,info);
+            return new JsonResult(result);
         }
 
     }

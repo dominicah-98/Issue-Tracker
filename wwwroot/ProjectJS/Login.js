@@ -1,4 +1,41 @@
 ﻿$(function () {
+
+    $("#btnShowReg").on('click', function () {
+        $(this).addClass("d-none");
+        $("#btnShowLogin").removeClass("d-none");
+        $("#frmLogin").addClass("d-none");
+        $("#frmReg").removeClass("d-none");
+        $("#lblFormHeading").text("");
+        $("#lblFormHeading").text("User Registration");
+    });
+    $("#btnShowLogin").on('click', function () {
+        $(this).addClass("d-none");
+        $("#btnShowReg").removeClass("d-none");
+        $("#frmLogin").removeClass("d-none");
+        $("#frmReg").addClass("d-none");
+        $("#lblFormHeading").text("");
+        $("#lblFormHeading").text("User Login");
+    });
+
+    $("#btnEmpReg").click(function () {
+        let param = { empemail: $("#txtEmpEmail"), Empname: $("#txtEmpName"), Password: $("#txtEmpPass") };
+        let url = "api/ticket/ResgisterEmp";
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: param,
+            //processData: false,
+            //contentType: false,
+            //dataType: 'json',
+            //contentType: "multipart/mixed",
+            success: function (msg) {
+                alert(msg);
+                window.location.href = "Login";
+            }
+        });
+    })
+
     // Login Button Click 
     $("#btnLogin").click(function () {
         if (validtion() === true) {
@@ -43,5 +80,4 @@
             return true;
     }
 
-// End 
 });

@@ -83,5 +83,12 @@ namespace QuickDesk.BLL
             }
             return mlist;
         }
+
+        public static String Ticket_EmpReg(string connection, clsLoginResultInfo info)
+        {
+            return clsDatabase.fnDBOperation(connection, "PRC_Ticket_EmpReg",
+                                            info.empemail, info.Empname, info.Password);
+
+        }
     }
 }

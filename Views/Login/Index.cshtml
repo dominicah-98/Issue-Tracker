@@ -26,9 +26,10 @@
                         <span class="d-block w-100 text-center small">Build: 23.04.001</span>
                         <div class="container-fluid mt-4">
                             <div class="text-center mb-4">
-                                <h5 class="mt-4 fw-bold fs-4">User Login</h5>
-                                <a class="text-decoration-none">Sign up | </a>
-                                <a class="text-decoration-none">Forget Password</a>
+                                <h5 class="mt-4 fw-bold fs-4" id="lblFormHeading">User Login</h5>
+                                <a class="text-primary pointer" id="btnShowReg">Sign up | </a>
+                                <a class="text-primary pointer d-none" id="btnShowLogin">Sign in | </a>
+                                <a class="text-primary pointer">Forget Password</a>
                             </div>
                             <!-- Login form -->
                             <form id="frmLogin">
@@ -54,6 +55,14 @@
 
                             </form>
                             <!-- End of login form -->
+                            <!-- Registration form -->
+                            <form id="frmReg" class="d-none">
+                                <input type="text" class="form-control form-control-sm my-2" id="txtEmpEmail" placeholder="Enter Your Email ID" autocomplete="off" />
+                                <input type="text" class="form-control form-control-sm my-2" id="txtEmpName" placeholder="Enter Your Name" autocomplete="off" />
+                                <input type="password" class="form-control form-control-sm my-2" id="txtEmpPass" placeholder="Enter A Password" autocomplete="off" />
+                                <input type="button" class="btn btn-sm btn-primary w-100 mt-4 mb-3" id="btnEmpReg" value="Register" />
+                            </form>
+                            <!-- End of Registration form -->
                         </div>
                     </div>
                     <span class="d-block text-center mt-md-5 mt-4 small">2023 Technical Collaboration with IECSL Team</span>
