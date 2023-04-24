@@ -4,7 +4,6 @@
     let url1 = "api/ticket/AdminUserType";
     let param = { "useremail": useremail };
 
-    //Default();
     $.get(url1, param, function (data) {
         //console.log(data);
         if (data.length > 0) {
@@ -12,29 +11,47 @@
                 //console.log(x);
                 $("#hdEmpType").val(String(x.admin));
                 if (x.admin == true) {
-                    //Admin();
+                    Admin();
+                    adminBarChart();
+                    adminLineChart();
                     $("#lblSwitch").text("");
                     $("#lblSwitch").text("Admin");
+                    $("#hdDashType").val("Admin");
+                    $("#lblSwitchUser").removeClass("fw-bold");
+                    $("#lblSwitchUser").addClass("small");
+                    $("#lblSwitch").addClass("fw-bold");
+                    $("#lblSwitch").removeClass("small");
                 }
                 else if (x.admin == false) {
-                    //Developer();
+                    Developer();
+                    devLineChart();
                     $("#lblSwitch").text("");
                     $("#lblSwitch").text("Developer");
+                    $("#hdDashType").val("Developer");
+                    $("#lblSwitchUser").removeClass("fw-bold");
+                    $("#lblSwitchUser").addClass("small");
+                    $("#lblSwitch").addClass("fw-bold");
+                    $("#lblSwitch").removeClass("small");
                 }
+                $("#chkSwitch").prop("checked", true);
             });
         }
         else {
             $("#chkSwitch").attr("disabled", "disabled");
+            $("#chkSwitch").prop("checked", false);
             $("#lblSwitch").text("");
             $("#lblSwitchUser").addClass("fw-bold");
-            //User();
+            User();
+            userBarChart();
         }
+        setTimeout(function () {
+            $('#divloading').css("display", "none");
+        }, 2000);
     });
-    User();
-    userBarChart();
     //User/Developer/Admin dashboard switch
-    $("#chkSwitch").click(function () {
-        if(this.checked) {
+    $("#chkSwitch").change(function () {
+        $('#divloading').css("display", "block");
+        if (this.checked) {
             if ($("#hdEmpType").val() == "true") {
                 Admin();
                 adminBarChart();
@@ -54,17 +71,28 @@
                 $("#lblSwitch").removeClass("small");
                 $("#hdDashType").val("Developer");
             }
+            $('#divloading').css("display", "none");
         }
         else {
-            location.reload(true);
+            User();
+            userBarChart();
+            $("#lblSwitch").removeClass("fw-bold");
+            $("#lblSwitch").addClass("small");
+            $("#lblSwitchUser").addClass("fw-bold");
+            $("#lblSwitchUser").removeClass("small");
+            $("#hdDashType").val("");
+            $('#divloading').css("display", "none");
         }
     });
 
+
     //User
-    $("#tblTicketList").on('click','#lblIssueDash',function () {
-        alert($(this).attr("data-content"));
-    });
+
+    //$("#tblTicketList").on('click','#lblIssueDash',function () {
+    //    alert($(this).attr("data-content"));
+    //});
     $("#btnAllTicketList").click(function () {
+        /*$('#divloading').css("display", "block");*/
         let listType = $(this).attr("data-type");
         $("#hdListStatusType").val("");
         $("#hdListStatusType").val(listType);
@@ -79,88 +107,147 @@
                 url = "api/ticket/ticketdashlistAllUser";
             }
         }
-        else if (listType == "open") {
-            if ($("#cardOpenTicket").html() == 0) {
-                alert("There are no tickets to show");
-                return false;
-            }
-            else {
-                url = "api/ticket/ticketopenListAllUser";
-            }
-            
-        }
-        else if (listType == "solved") {
-            if ($("#cardSolvedTicket").html() == 0) {
-                alert("There are no tickets to show");
-                return false;
-            }
-            else {
-                url = "api/ticket/ticketsolvedListAllUser";
-            }
-        }
-        else if (listType == "close") {
-            if ($("#cardClosedTicket").html() == 0) {
-                alert("There are no tickets to show");
-                return false;
-            }
-            else {
-                url = "api/ticket/ticketclosedListAllUser";
-            }
-        }
+        //else if (listType == "open") {
+        //    if ($("#cardOpenTicket").html() == 0) {
+        //        alert("There are no tickets to show");
+        //        return false;
+        //    }
+        //    else {
+        //        url = "api/ticket/ticketopenListAllUser";
+        //    }
+
+        //}
+        //else if (listType == "solved") {
+        //    if ($("#cardSolvedTicket").html() == 0) {
+        //        alert("There are no tickets to show");
+        //        return false;
+        //    }
+        //    else {
+        //        url = "api/ticket/ticketsolvedListAllUser";
+        //    }
+        //}
+        //else if (listType == "close") {
+        //    if ($("#cardClosedTicket").html() == 0) {
+        //        alert("There are no tickets to show");
+        //        return false;
+        //    }
+        //    else {
+        //        url = "api/ticket/ticketclosedListAllUser";
+        //    }
+        //}
         //console.log(url);
         //let url = "api/ticket/ticketlist";
         TicketList(url);
         $("#ModalTicketDetail").modal('show');
     })
     $("#btnAllTicket").click(function () {
-        let url1 = "api/ticket/ticketdashlist";
-        let param1 = { "username": useremail };
-        TicketDashList(url1, param1);
-        $("#btnAllTicketList").attr("data-type", "");
-        $("#btnAllTicketList").attr("data-type", "all");
-    })
-    $("#btnOpenTicketList").click(function () {
-        let url1 = "api/ticket/ticketopenListDash";
-        let param1 = { "username": useremail };
-        TicketDashList(url1, param1);
-        $("#btnAllTicketList").attr("data-type","");
-        $("#btnAllTicketList").attr("data-type","open");
-    });
-    $("#btnSolvedTicketList").click(function () {
-        let url1 = "api/ticket/ticketsolvedListDash";
-        let param1 = { "username": useremail };
-        TicketDashList(url1, param1);
-        $("#btnAllTicketList").attr("data-type", "");
-        $("#btnAllTicketList").attr("data-type", "solved");
-    });
-    $("#btnClosedTicketList").click(function () {
-        let url1 = "api/ticket/ticketclosedListDash";
-        let param1 = { "username": useremail };
-        TicketDashList(url1, param1);
-        $("#btnAllTicketList").attr("data-type", "");
-        $("#btnAllTicketList").attr("data-type", "close");
-    });
-    $("#btnCloseTicketList").click(function () {
-        $("#ModalTicketDetail").modal('hide');
-        let userType = $("#hdDashType").val();
-        console.log(userType);
-        if (userType == "Admin") {
-            //userRole = "Admin";
-            Admin();
-            adminBarChart();
-            adminLineChart();
-        }
-        else if (userType == "Developer") {
-            //userRole = "Developer";
-            Developer();
-            devLineChart();
+        /*$('#divloading').css("display", "block");*/
+        if ($("#cardTotalTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
         }
         else {
-            //userRole = "User";
-            User();
-            userBarChart();
+            let url = "api/ticket/ticketdashlistAllUser";
+            TicketList(url);
+            $("#ModalTicketDetail").modal('show');
+            $("#hdListStatusType").val("");
+            $("#hdListStatusType").val("all");
         }
-        //window.location.href = "Dashboard";
+        //let param1 = { "username": useremail };
+        //let url1 = "api/ticket/ticketdashlist";
+        //TicketDashList(url1, param1);
+        //$("#btnAllTicketList").attr("data-type", "");
+        //$("#btnAllTicketList").attr("data-type", "all");
+    })
+    $("#btnOpenTicketList").click(function () {
+        if ($("#cardOpenTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/ticketopenListAllUser";
+            TicketList(url);
+            $("#ModalTicketDetail").modal('show');
+            $("#hdListStatusType").val("");
+            $("#hdListStatusType").val("open");
+        }
+        //let url1 = "api/ticket/ticketopenListDash";
+        //let param1 = { "username": useremail };
+        //TicketDashList(url1, param1);
+        //$("#btnAllTicketList").attr("data-type","");
+        //$("#btnAllTicketList").attr("data-type","open");
+    });
+    $("#btnReviewTicketList").click(function () {
+        if ($("#cardReviewTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/ticketreviewList";
+            TicketList(url);
+            $("#ModalTicketDetail").modal('show');
+            $("#hdListStatusType").val("");
+            $("#hdListStatusType").val("review");
+        }
+        //let url1 = "api/ticket/ticketopenListDash";
+        //let param1 = { "username": useremail };
+        //TicketDashList(url1, param1);
+        //$("#btnAllTicketList").attr("data-type","");
+        //$("#btnAllTicketList").attr("data-type","open");
+    });
+    $("#btnAllocTicketList").click(function () {
+        if ($("#cardAllocatedTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/ticketallocatedList";
+            TicketList(url);
+            $("#ModalTicketDetail").modal('show');
+            $("#hdListStatusType").val("");
+            $("#hdListStatusType").val("allocated");
+        }
+        //let url1 = "api/ticket/ticketopenListDash";
+        //let param1 = { "username": useremail };
+        //TicketDashList(url1, param1);
+        //$("#btnAllTicketList").attr("data-type","");
+        //$("#btnAllTicketList").attr("data-type","open");
+    });
+    $("#btnSolvedTicketList").click(function () {
+        if ($("#cardSolvedTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/ticketsolvedListAllUser";
+            TicketList(url);
+            $("#ModalTicketDetail").modal('show');
+            $("#hdListStatusType").val("");
+            $("#hdListStatusType").val("solved");
+        }
+        //let url1 = "api/ticket/ticketsolvedListDash";
+        //let param1 = { "username": useremail };
+        //TicketDashList(url1, param1);
+        //$("#btnAllTicketList").attr("data-type", "");
+        //$("#btnAllTicketList").attr("data-type", "solved");
+    });
+    $("#btnClosedTicketList").click(function () {
+        if ($("#cardClosedTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/ticketclosedListAllUser";
+            TicketList(url);
+            $("#ModalTicketDetail").modal('show');
+            $("#hdListStatusType").val("");
+            $("#hdListStatusType").val("close");
+        }
+        //let url1 = "api/ticket/ticketclosedListDash";
+        //let param1 = { "username": useremail };
+        //TicketDashList(url1, param1);
+        //$("#btnAllTicketList").attr("data-type", "");
+        //$("#btnAllTicketList").attr("data-type", "close");
     });
 
     //Developer
@@ -212,52 +299,104 @@
         $("#ModalDeveloperList").modal('show');
     });
     $("#btnAllTicketDev").click(function () {
-        let url1 = "api/ticket/dashboardticketlistDev";
-        let param1 = { "useremail": useremail };
-        TicketDashListDev(url1, param1);
-        $("#btnDevAllTicketList").attr("data-type", "");
-        $("#btnDevAllTicketList").attr("data-type", "all");
+        let param = { "useremail": useremail };
+        if ($("#cardTotalTicketDev").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/dashboardticketlistDevAll";
+            DevList(url, param);
+            $("#ModalDeveloperList").modal('show');
+        }
+        //let url1 = "api/ticket/dashboardticketlistDev";
+        //let param1 = { "useremail": useremail };
+        //TicketDashListDev(url1, param1);
+        //$("#btnDevAllTicketList").attr("data-type", "");
+        //$("#btnDevAllTicketList").attr("data-type", "all");
     })
     $("#btnAllocTicketDev").click(function () {
-        let url1 = "api/ticket/ticketDevAssignedListDash";
-        let param1 = { "useremail": useremail };
-        TicketDashListDev(url1, param1);
-        $("#btnDevAllTicketList").attr("data-type", "");
-        $("#btnDevAllTicketList").attr("data-type", "allocated");
+        let param = { "useremail": useremail };
+        if ($("#cardAllocatedTicketDev").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/ticketDevAssignedListAll";
+            DevList(url, param);
+            $("#ModalDeveloperList").modal('show');
+        }
+        //let url1 = "api/ticket/ticketDevAssignedListDash";
+        //let param1 = { "useremail": useremail };
+        //TicketDashListDev(url1, param1);
+        //$("#btnDevAllTicketList").attr("data-type", "");
+        //$("#btnDevAllTicketList").attr("data-type", "allocated");
     });
     $("#btnSolvedTicketDev").click(function () {
-        let url1 = "api/ticket/ticketsolvedDevListDash";
-        let param1 = { "useremail": useremail };
-        TicketDashListDev(url1, param1);
-        $("#btnDevAllTicketList").attr("data-type", "");
-        $("#btnDevAllTicketList").attr("data-type", "solved");
+        //let url1 = "api/ticket/ticketsolvedDevListDash";
+        //let param1 = { "useremail": useremail };
+        //TicketDashListDev(url1, param1);
+        //$("#btnDevAllTicketList").attr("data-type", "");
+        //$("#btnDevAllTicketList").attr("data-type", "solved");
+        let param = { "useremail": useremail };
+        if ($("#cardSolvedTicketDev").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/ticketsolvedDevListAll";
+            DevList(url, param);
+            $("#ModalDeveloperList").modal('show');
+        }
     });
     $("#btnClosedTicketDev").click(function () {
-        let url1 = "api/ticket/ticketclosedDevListDash";
-        let param1 = { "useremail": useremail };
-        TicketDashListDev(url1, param1);
-        $("#btnDevAllTicketList").attr("data-type", "");
-        $("#btnDevAllTicketList").attr("data-type", "close");
+        let param = { "useremail": useremail };
+        if ($("#cardClosedTicketDev").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            let url = "api/ticket/ticketclosedDevListAll";
+            DevList(url, param);
+            $("#ModalDeveloperList").modal('show');
+        }
+        //let url1 = "api/ticket/ticketclosedDevListDash";
+        //let param1 = { "useremail": useremail };
+        //TicketDashListDev(url1, param1);
+        //$("#btnDevAllTicketList").attr("data-type", "");
+        //$("#btnDevAllTicketList").attr("data-type", "close");
     });
     $("#btnCloseDevTicketList").click(function () {
-        $("#ModalDeveloperList").modal('hide');
+        $("#LoaderTicketList2").removeClass("d-none");
+        $("#btnCloseDevTicketList").addClass("d-none");
+        $("#btnCloseDevTicketList").removeClass("d-block");
+        //$("#ModalDeveloperList").modal('hide');
         let userType = $("#hdDashType").val();
-        console.log(userType);
+        //console.log(userType);
         if (userType == "Admin") {
             //userRole = "Admin";
             Admin();
             adminBarChart();
             adminLineChart();
+            setTimeout(function () {
+                $("#ModalDeveloperList").modal('hide')
+            }, 1000);
         }
         else if (userType == "Developer") {
             //userRole = "Developer";
             Developer();
             devLineChart();
+            setTimeout(function () {
+                $("#ModalDeveloperList").modal('hide')
+            }, 1000);
         }
         else {
             //userRole = "User";
             User();
             userBarChart();
+            setTimeout(function () {
+                $("#ModalDeveloperList").modal('hide')
+            }, 1000);
         }
         //Developer();
         //devLineChart();
@@ -267,8 +406,8 @@
     $("#btnAllTicketListAdm").click(function () {
         let listType = $(this).attr("data-type");
         let param = { "useremail": useremail };
-        $("#hdListAdmType").val("");
-        $("#hdListAdmType").val(listType);
+        //$("#hdListAdmType").val("");
+        //$("#hdListAdmType").val(listType);
 
         let url = "";
         if (listType == "all") {
@@ -314,67 +453,182 @@
         $("#ModalTicketDetail").modal('show');
     });
     $("#btnAllTicketadm").click(function () {
-        let url1 = "api/ticket/ticketlistAdminDash";
-        let param1 = { "username": useremail };
-        TicketDashListAdm(url1, param1);
-        $("#btnAllTicketListAdm").attr("data-type", "");
-        $("#btnAllTicketListAdm").attr("data-type", "all");
-    })
+        if ($("#adminDashCardTable").find("#cardTotalTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            $('#divloading').css("display", "block");
+            let url = "api/ticket/ticketlist";
+            TicketList(url);
+            setTimeout(function () {
+                $("#ModalTicketDetail").modal('show');
+                $('#divloading').css("display", "none");
+            }, 1500);
+            $("#hdListAdmType").val("");
+            $("#hdListAdmType").val("all");
+        }
+        //let url1 = "api/ticket/ticketlistAdminDash";
+        //let param1 = { "username": useremail };
+        //TicketDashListAdm(url1, param1);
+        //$("#btnAllTicketListAdm").attr("data-type", "");
+        //$("#btnAllTicketListAdm").attr("data-type", "all");
+    });
     $("#btnOpenTicketListadm").click(function () {
-        let url1 = "api/ticket/ticketOpenAdminDashList";
-        let param1 = { "username": useremail };
-        TicketDashListAdm(url1, param1);
-        $("#btnAllTicketListAdm").attr("data-type", "");
-        $("#btnAllTicketListAdm").attr("data-type", "open");
+        if ($("#adminDashCardTable").find("#cardOpenTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            $('#divloading').css("display", "block");
+            let url = "api/ticket/ticketlistOpen";
+            TicketList(url);
+            setTimeout(function () {
+                $("#ModalTicketDetail").modal('show');
+                $('#divloading').css("display", "none");
+            }, 1500);
+            $("#hdListAdmType").val("");
+            $("#hdListAdmType").val("open");
+        }
+        //let url1 = "api/ticket/ticketOpenAdminDashList";
+        //let param1 = { "username": useremail };
+        //TicketDashListAdm(url1, param1);
+        //$("#btnAllTicketListAdm").attr("data-type", "");
+        //$("#btnAllTicketListAdm").attr("data-type", "open");
     });
     $("#btnSolvedTicketListadm").click(function () {
-        let url1 = "api/ticket/ticketlistSolvedAdminDash";
-        let param1 = { "username": useremail };
-        TicketDashListAdm(url1, param1);
-        $("#btnAllTicketListAdm").attr("data-type", "");
-        $("#btnAllTicketListAdm").attr("data-type", "solved");
+        if ($("#adminDashCardTable").find("#cardSolvedTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            $('#divloading').css("display", "block");
+            let url = "api/ticket/ticketlistSolved";
+            TicketList(url);
+            setTimeout(function () {
+                $("#ModalTicketDetail").modal('show');
+                $('#divloading').css("display", "none");
+            }, 1500);
+            $("#hdListAdmType").val("");
+            $("#hdListAdmType").val("solved");
+        }
+        //let url1 = "api/ticket/ticketlistSolvedAdminDash";
+        //let param1 = { "username": useremail };
+        //TicketDashListAdm(url1, param1);
+        //$("#btnAllTicketListAdm").attr("data-type", "");
+        //$("#btnAllTicketListAdm").attr("data-type", "solved");
+    });
+    $("#btnAllocTicketListadm").click(function () {
+        if ($("#adminDashCardTable").find("#cardAllocatedTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            $('#divloading').css("display", "block");
+            let url = "api/ticket/dashboardAllocticketlistAdmall";
+            DevListAdm(url);
+            setTimeout(function () {
+                $("#ModalDeveloperList").modal('show');
+                $('#divloading').css("display", "none");
+            }, 1500);
+            $("#hdListAdmType").val("");
+            $("#hdListAdmType").val("allocated");
+            //let url = "api/ticket/ticketlistAllocAdminList";
+            //TicketList(url);
+            //$("#ModalTicketDetail").modal('show');
+        }
+    });
+    $("#btnReviewTicketListadm").click(function () {
+        if ($("#adminDashCardTable").find("#cardReviewTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            $('#divloading').css("display", "block");
+            let url = "api/ticket/ticketlistReviewAdminList";
+            TicketList(url);
+            setTimeout(function () {
+                $("#ModalTicketDetail").modal('show');
+                $('#divloading').css("display", "none");
+            }, 1000);
+            $("#ModalTicketDetail").modal('show');
+            $("#hdListAdmType").val("");
+            $("#hdListAdmType").val("review");
+        }
+        //let url1 = "api/ticket/ticketlistSolvedAdminDash";
+        //let param1 = { "username": useremail };
+        //TicketDashListAdm(url1, param1);
+        //$("#btnAllTicketListAdm").attr("data-type", "");
+        //$("#btnAllTicketListAdm").attr("data-type", "solved");
     });
     $("#btnClosedTicketListadm").click(function () {
-        let url1 = "api/ticket/ticketlistClosedAdminDash";
-        let param1 = { "username": useremail };
-        TicketDashListAdm(url1, param1);
-        $("#btnAllTicketListAdm").attr("data-type", "");
-        $("#btnAllTicketListAdm").attr("data-type", "close");
+        if ($("#adminDashCardTable").find("#cardClosedTicket").html() == 0) {
+            alert("There are no tickets to show");
+            return false;
+        }
+        else {
+            $('#divloading').css("display", "block");
+            let url = "api/ticket/ticketlistClosed";
+            TicketList(url);
+            setTimeout(function () {
+                $("#ModalTicketDetail").modal('show');
+                $('#divloading').css("display", "none");
+            }, 1000);
+            $("#hdListAdmType").val("");
+            $("#hdListAdmType").val("close");
+        }
     });
     $("#btnCloseTicketList").click(function () {
-        $("#ModalTicketDetail").modal('hide');
+        //$('#divloading').css("display", "block");
+        //setTimeout($('#divloading').css("display", "block"), 3000);
+        $("#LoaderTicketList1").removeClass("d-none");
+        $("#btnCloseTicketList").addClass("d-none");
+        $("#btnCloseTicketList").removeClass("d-block");
+        $("#tblTicketBody").empty();
         let userType = $("#hdDashType").val();
-        console.log(userType);
+        //console.log(userType);
         if (userType == "Admin") {
             //userRole = "Admin";
             Admin();
             adminBarChart();
             adminLineChart();
+            setTimeout(function () {
+                $("#ModalTicketDetail").modal('hide')
+            }, 500);
+            //$("#ModalTicketDetail").modal('hide');
         }
         else if (userType == "Developer") {
             //userRole = "Developer";
             Developer();
             devLineChart();
+            setTimeout(function () {
+                $("#ModalTicketDetail").modal('hide')
+            }, 500);
+            //$("#ModalTicketDetail").modal('hide');
         }
         else {
             //userRole = "User";
             User();
             userBarChart();
+            setTimeout(function () {
+                $("#ModalTicketDetail").modal('hide')
+            }, 500);
+            //$("#ModalTicketDetail").modal('hide');
         }
         //window.location.href = "Dashboard";
     });
-    $("#btnDevAllcTicketList").click(function () {
-        //let listType = $(this).attr("data-type");
-        //let param = { "useremail": useremail };
-        //$("#hdListDevType").val("");
-        //$("#hdListDevType").val(listType);
+    //$("#btnDevAllcTicketList").click(function () {
+    //    //let listType = $(this).attr("data-type");
+    //    //let param = { "useremail": useremail };
+    //    //$("#hdListDevType").val("");
+    //    //$("#hdListDevType").val(listType);
 
-        let url = "api/ticket/dashboardAllocticketlistAdmall";
-        
-        //console.log(listType);
-        DevListAdm(url);
-        $("#ModalDeveloperList").modal('show');
-    });
+    //    let url = "api/ticket/dashboardAllocticketlistAdmall";
+
+    //    //console.log(listType);
+    //    DevListAdm(url);
+    //    $("#ModalDeveloperList").modal('show');
+    //});
 
     //Insert Ticket
     $("#btnAddticket").click(function () {
@@ -390,6 +644,18 @@
         //$("#divImage").hide();
         $('#modalAddticket').modal('hide');
     });
+    //Mapping Application and Category
+    $("#ddlApplication").change(function () {
+        let data = parseInt($(this).val());
+        let url = "api/ticket/ApplicationCategoryMap";
+        let param = { "Application": data };
+        //console.log(param);
+        $.get(url, param, function (data) {
+            data.map(function (x) {
+                $("#ddlCategory option[value = " + x.idCat + "]").attr('selected', 'selected');
+            });
+        });
+    });
     $("#btnSaveTicket").click(function () {
         if (Validation() == true) {
             var file = $("#txtImage").get(0).files[0];
@@ -400,7 +666,6 @@
                 filepath = "";
             }
             //let filepath = "/TicketImg/" + $("#txtNo").val() + "/" + file.name;
-
             var formData = new FormData();
             formData.append("IDTicket", $("#hdIDTicket").val());
             formData.append("TicketNo", $("#txtNo").val());
@@ -436,6 +701,7 @@
     //Ticket Detail
     //Showing Ticket Details
     $("#tblTicket").on('click', '#btnDetail', function () {
+        $("#overlay1").removeClass("d-none");
         let idTicket = $(this).attr("data-value");
         let listType = $(this).attr("data-type");
         let userType = String($("#hdEmpType").val());
@@ -451,6 +717,7 @@
         $("#ModalPerTicketDetail").modal('show');
     });
     $("#tblDevTicket").on('click', '#btnDevTicketDetail', function () {
+        $("#overlay3").removeClass("d-none");
         let idTicket = $(this).attr("data-value");
         let listType = $(this).attr("data-type");
         //console.log(listType);
@@ -465,49 +732,70 @@
     });
     //Closing Details Modal
     $("#btnCloseDetail").click(function () {
+        $("#overlay1").addClass("d-none");
+        $("#overlay3").addClass("d-none");
         let listTypeUser = $("#hdListStatusType").val();
         let listTypeDev = $("#hdListDevType").val();
         let listTypeAdm = $("#hdListAdmType").val();
+        console.log(listTypeUser, listTypeDev, listTypeAdm);
         $("#ModalPerTicketDetail").modal('hide');
-        console.log(listTypeUser);
+        //console.log(listTypeUser);
         ClearModalDetails();
         if (listTypeUser != "") {
             let url = "";
             if (listTypeUser == "all") {
                 url = "api/ticket/ticketdashlistAllUser";
+                TicketList(url);
             }
             else if (listTypeUser == "allocated") {
-                url = "api/ticket/ticketopenListAllUser";
+                //url = "api/ticket/dashboardAllocticketlistAdmall";
+                url = "api/ticket/ticketallocatedList";
+                //TicketList(url);
+                DevListAdm(url);
             }
             else if (listTypeUser == "solved") {
                 url = "api/ticket/ticketsolvedListAllUser";
+                TicketList(url);
             }
             else if (listTypeUser == "close") {
                 url = "api/ticket/ticketclosedListAllUser";
+                TicketList(url);
             }
             else if (listTypeUser == "open") {
                 url = "api/ticket/ticketopenListAllUser";
+                TicketList(url);
             }
-            TicketList(url);
+            else if (listTypeUser == "review") {
+                url = "api/ticket/ticketreviewList";
+                TicketList(url);
+            }
         }
         if (listTypeAdm != "") {
             let url = "";
             if (listTypeAdm == "all") {
                 url = "api/ticket/ticketlist";
+                TicketList(url);
             }
             else if (listTypeAdm == "allocated") {
-                url = "api/ticket/ticketopenListAllUser";
+                url = "api/ticket/dashboardAllocticketlistAdmall";
+                DevListAdm(url);
             }
             else if (listTypeAdm == "solved") {
                 url = "api/ticket/ticketlistSolved";
+                TicketList(url);
             }
             else if (listTypeAdm == "close") {
                 url = "api/ticket/ticketlistClosed";
+                TicketList(url);
             }
             else if (listTypeAdm == "open") {
                 url = "api/ticket/ticketlistOpen";
+                TicketList(url);
             }
-            TicketList(url);
+            else if (listTypeAdm == "review") {
+                url = "api/ticket/ticketlistReviewAdminList";
+                TicketList(url);
+            }
         }
         if (listTypeDev != "") {
             let param = { "useremail": useremail };
@@ -524,7 +812,7 @@
             else if (listTypeDev == "close") {
                 url = "api/ticket/ticketclosedDevListAll";
             }
-            DevList(url,param);
+            DevList(url, param);
         }
         //window.location.href = "Dashboard";
     });
@@ -574,7 +862,7 @@
                 $("#btnAssignDev").addClass("d-none");
                 $("#ddlAssignDev").addClass("d-none");
                 $("#btnCancelAssign").addClass("d-none");
-                ShowTicketDetails(idTicket);
+                ShowAssignedTicketDetails(idTicket, "");
             }
         });
     });
@@ -610,7 +898,7 @@
 
         // Status Dropdown
         let url = "";
-        if ($("#hdDashType").val()=="Admin") {
+        if ($("#hdDashType").val() == "Admin") {
             url = "api/ticket/statuslistAdmin";
         }
         else if ($("#hdDashType").val() == "Developer") {
@@ -707,36 +995,65 @@
         $("#btnCancelStatus").addClass("d-none");
         $("#btnSaveStatus").addClass("d-none");
     });
-    $("#ddlApplication").change(function () {
-        let data = parseInt($(this).val());
-        let url = "api/ticket/ApplicationCategoryMap";
-        let param = { "Application": data };
-        //console.log(param);
-        $.get(url, param, function (data) {
-            data.map(function (x) {
-                //console.log(x);
 
-                $("#ddlCategory option[value = " + x.idCat + "]").attr('selected', 'selected');
-            });
-        });
-    });
+    //Image Modal
+    $("#imgTicket").on("mouseover", function () {
+        let imgLink = $(this).attr("src");
+        const fileArr = imgLink.split(".");
+        if (imgLink != "") {
+            if (fileArr[1] == "pdf" || fileArr[1] == "docx") {
+                $("#imgTicketModal").css("width", "500px");
+                $("#imgTicketModal").css("height", "500px");
+            }
+            else {
+                $("#imgTicketModal").removeAttr("style");
+            }
+            $("#imgTicketModal").attr('data', imgLink);
+            //$("#imgTicketModal").attr('type', "application/pdf");
+            $("#btnDownloadImg").attr("href", imgLink);
+            $(".ModalTicketImg").removeClass("d-none");
+            $("#overlay2").removeClass("d-none");
+        }
+        else {
+            return false;
+        }
+    })
+    $("#btnCloseImgModal").on("click", function () {
+        $("#imgTicketModal").attr('data', "");
+        $(".ModalTicketImg").addClass("d-none");
+        $("#overlay2").addClass("d-none");
+    })
 
     function Admin() {
         $("#userDashCardTable").addClass("d-none");
         $("#btnAddticket").addClass("d-none");
         $("#devDashCardTable").addClass("d-none");
         $("#adminDashCardTable").removeClass("d-none");
+        //$('#divloading').css("display", "block")
 
         let url1 = "api/ticket/ticketlistAdminNo";
         let param1 = { "username": useremail };
         $.get(url1, param1, function (data) {
             $("#adminDashCardTable").find("#cardTotalTicket").html(data);
+            //$('#divloading').css("display", "none")
         });
 
         let url2 = "api/ticket/ticketlistOpenAdminNo";
         //let param1 = { "username": useremail };
         $.get(url2, param1, function (data) {
             $("#adminDashCardTable").find("#cardOpenTicket").html(data);
+        });
+
+        let url7 = "api/ticket/ticketlistAllocAdminNo";
+        //let param1 = { "username": useremail };
+        $.get(url7, param1, function (data) {
+            $("#adminDashCardTable").find("#cardAllocatedTicket").html(data);
+        });
+
+        let url8 = "api/ticket/ticketlistReviewAdminNo";
+        //let param1 = { "username": useremail };
+        $.get(url8, param1, function (data) {
+            $("#adminDashCardTable").find("#cardReviewTicket").html(data);
         });
 
         let url3 = "api/ticket/ticketlistClosedAdminNo";
@@ -755,39 +1072,75 @@
         TicketDashListAdm(url5, param1);
         $("#divRecentActivities").removeClass("d-none");
 
-        let url6 = "api/ticket/ticketAssigned";
-        //let param1 = { "username": useremail };
-        let txt2 = "";
-        $("#tblAssignedListAdm").empty();
-        $.get(url6, function (data) {
-            let count2 = 1;
+        //let url6 = "api/ticket/ticketAssigned";
+        //let txt2 = "";
+        //$.get(url6, function (data) {
+        //    let count2 = 1;
+        //    $("#tblAssignedListAdm").empty();
+        //    data.map(function (x) {
+        //        //console.log(x);
+        //        txt2 += "<tr>";
+        //        txt2 += "<td>" + count2 + "</td>";
+        //        txt2 += "<td>" + x.ticketNo + "</td>";
+        //        txt2 += "<td>" + x.allocationDate + "</td>";
+        //        txt2 += "<td>" + x.applicationName + "</td>";
+        //        if (x.priority == "NORMAL") {
+        //            txt2 += "<td class='text-secondary'>" + x.priority + "</td>";
+        //        }
+        //        if (x.priority == "URGENT") {
+        //            txt2 += "<td class='text-indigo'>" + x.priority + "</td>";
+        //        }
+        //        if (x.priority == "VERY URGENT") {
+        //            txt2 += "<td class='text-danger'>" + x.priority + "</td>";
+        //        }
+        //        if (x.priority == "ASAP") {
+        //            txt2 += "<td><span class='badge text-bg-danger'>" + x.priority + "<span></td>";
+        //        }
+        //        txt2 += "<td>" + x.allocatedTo + "</td>";
+        //        txt2 += "</tr>";
+        //        count2++;
+        //    })
+        //    $("#tblAssignedListAdm").append(txt2);
+        //});
+
+        let url6 = "api/ticket/ticketRecentActivitiesAdm";
+        TicketRecentActivitiesAdm(url6);
+
+        let url9 = "api/ticket/ticketlist";
+        let TicketNoArrAdm = [];
+        $("#txtSearchBar").autocomplete({ source: [] });
+        $.get(url9, param1, function (data) {
+            //console.log(data);
             data.map(function (x) {
-                //console.log(x);
-                txt2 += "<tr>";
-                txt2 += "<td>" + count2 + "</td>";
-                txt2 += "<td>" + x.ticketNo + "</td>";
-                txt2 += "<td>" + x.allocationDate + "</td>";
-                txt2 += "<td>" + x.applicationName + "</td>";
-                if (x.priority == "NORMAL") {
-                    txt2 += "<td class='text-secondary'>" + x.priority + "</td>";
+                TicketNoArrAdm.push({
+                    "label": x.ticketNo,
+                    "value": x.idTicket
+                });
+            });
+            //console.log(TicketNoArrAdm);
+            $("#txtSearchBar").autocomplete({
+                minLength: 0,
+                source: TicketNoArrAdm,
+                focus: function (event, ui) {
+                    //console.log(event, ui);
+                    $("#txtSearchBar").val(ui.item.label);
+                    return false;
+                },
+                select: function (event, ui) {
+                    //console.log(ui.item.value);
+                    ShowAssignedTicketDetails(ui.item.value, "");
+                    $("#txtSearchBar").val(ui.item.label);
+                    $("#ModalPerTicketDetail").modal('show');
+                    return false;
                 }
-                if (x.priority == "URGENT") {
-                    txt2 += "<td class='text-indigo'>" + x.priority + "</td>";
-                }
-                if (x.priority == "VERY URGENT") {
-                    txt2 += "<td class='text-danger'>" + x.priority + "</td>";
-                }
-                if (x.priority == "ASAP") {
-                    txt2 += "<td><span class='badge text-bg-danger'>" + x.priority + "<span></td>";
-                }
-                txt2 += "<td>" + x.allocatedTo + "</td>";
-                txt2 += "</tr>";
-                count2++;
-            })
-            $("#tblAssignedListAdm").append(txt2);
+            });
         });
+
+
         $("#divDevActivities").removeClass("d-none");
         $("#admChart2").removeClass("d-none");
+        $("#admChart1").removeClass("d-none");
+        //$('#divloading').css("display", "none");
     }
     function Developer() {
         //$("#cardClosed").addClass("d-none");
@@ -867,9 +1220,45 @@
 
         let url6 = "api/ticket/dashboardticketlistDev";
         TicketDashListDev(url6, param1);
+        //$('#divloading').css("display", "none");
+
+        let url7 = "api/ticket/dashboardticketlistDevAll";
+        let TicketNoArrDev = [];
+        $("#txtSearchBar").autocomplete({ source: [] });
+        $.get(url7, param1, function (data) {
+            //console.log(data);
+            data.map(function (x) {
+                TicketNoArrDev.push({
+                    "label": x.ticketNo,
+                    "value": x.idTicket
+                });
+            });
+            //console.log(TicketNoArrAdm);
+            $("#txtSearchBar").autocomplete({
+                minLength: 0,
+                source: TicketNoArrDev,
+                focus: function (event, ui) {
+                    //console.log(event, ui);
+                    $("#txtSearchBar").val(ui.item.label);
+                    return false;
+                },
+                select: function (event, ui) {
+                    //console.log(ui.item.value);
+                    ShowAssignedTicketDetails(ui.item.value, "");
+                    $("#txtSearchBar").val(ui.item.label);
+                    $("#ModalPerTicketDetail").modal('show');
+                    return false;
+                }
+            });
+        });
     }
     function User() {
         $("#btnAddticket").removeClass("d-none");
+        $("#userDashCardTable").removeClass("d-none");
+        $("#devDashCardTable").addClass("d-none");
+        $("#adminDashCardTable").addClass("d-none");
+        //$("#divBarChartUser").removeClass("d-none");
+
         let url1 = "api/ticket/dashboardticketlist";
         let param1 = { "username": useremail };
         $.get(url1, param1, function (data) {
@@ -883,11 +1272,17 @@
             $("#userDashCardTable").find("#cardOpenTicket").html(data);
         });
 
-        //let url3 = "api/ticket/ticketallocated";
-        ////let param1 = { "username": useremail };
-        //$.get(url3, param1, function (data) {
-        //    $("#cardAllocatedTicket").html(data);
-        //});
+        let url3 = "api/ticket/ticketallocated";
+        //let param1 = { "username": useremail };
+        $.get(url3, param1, function (data) {
+            $("#cardAllocatedTicket").html(data);
+        });
+
+        let url7 = "api/ticket/ticketreview";
+        //let param1 = { "username": useremail };
+        $.get(url7, param1, function (data) {
+            $("#cardReviewTicket").html(data);
+        });
 
         let url4 = "api/ticket/ticketsolved";
         //let param1 = { "username": useremail };
@@ -901,12 +1296,58 @@
             $("#userDashCardTable").find("#cardClosedTicket").html(data);
         });
 
+        let url9 = "api/ticket/ticketdashlistAllUser";
+        let TicketNoArrUser = [];
+        $("#txtSearchBar").autocomplete({ source: [] });
+        $.get(url9, param1, function (data) {
+            //console.log(data);
+            data.map(function (x) {
+                TicketNoArrUser.push({
+                    "label": x.ticketNo,
+                    "value": x.idTicket
+                });
+            });
+            //console.log(TicketNoArrAdm);
+            $("#txtSearchBar").autocomplete({
+                minLength: 0,
+                source: TicketNoArrUser,
+                focus: function (event, ui) {
+                    //console.log(event, ui);
+                    $("#txtSearchBar").val(ui.item.label);
+                    return false;
+                },
+                select: function (event, ui) {
+                    //console.log(ui.item.value);
+                    ShowAssignedTicketDetails(ui.item.value, "");
+                    $("#txtSearchBar").val(ui.item.label);
+                    $("#ModalPerTicketDetail").modal('show');
+                    return false;
+                }
+            });
+        });
+
         $("#divDevActivities").addClass("d-none");
         $("#admChart2").addClass("d-none");
+        $("#admChart1").addClass("d-none");
 
         let url5 = "api/ticket/ticketdashlist";
         TicketDashList(url5, param1);
         //$("#lblRecentActivities").html("Recent Tickets Generated");
+
+        let url8 = "api/ticket/ticketRecentActivitiesUser";
+        let userType = String($("#hdEmpType").val());
+        let param2 = {};
+        if (userType != "") {
+            let str = $("#hdEmpname").val().toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                return letter.toUpperCase();
+            });
+            param2 = { "username": str };
+        }
+        else {
+            param2 = { "username": useremail };
+        }
+        TicketRecentActivities(url8, param2);
+        $('#divloading').css("display", "none");
     }
 
     function ModalDefault() {
@@ -954,6 +1395,7 @@
         });
     }
     function Validation() {
+        var file = $("#txtImage").get(0).files[0];
         //console.log($("#ddlApplication").val());
         if ($("#txtIssue").val() == "") {
             alert("Enter the Issue Description");
@@ -970,12 +1412,32 @@
             $("#ddlApplication").focus();
             return false;
         }
+        else if (file != null) {
+            let fileName = file.name;
+            const fileType = fileName.split(".");
+            //console.log(fileType);
+            if (fileType[1] == "pdf" || fileType[1] == "jpg" || fileType[1] == "jpeg" || fileType[1] == "png" || fileType[1] == "doc" || fileType[1] == "docx" || fileType[1] == "ppt" || fileType[1] == "pptx") {
+                return true;
+            }
+            else {
+                alert("Incorect file format!! Please upload .pdf/(.doc/.docx)/(.ppt/.pptx)/.jpg/.jpeg/.png type file");
+                //fileType.pop();
+                //console.log(fileType);
+                $("#txtImage").focus();
+                return false;
+            }
+        }
         else {
             return true;
         }
     }
     function TicketList(url) {
+        $("#LoaderTicketList1").addClass("d-none");
+        $("#btnCloseTicketList").removeClass("d-none");
+        $("#btnCloseTicketList").addClass("d-block");
+        //$('#divloading').css("display", "block");
         let data = { "username": $("#hdEmail").val() };
+        //$.ajaxSetup({ async: false });
         $.get(url, data, function (data) {
             //console.log(data);
             $("#tblTicketBody").empty();
@@ -1062,15 +1524,21 @@
                 str = str + "</tr>"
             });
             $("#tblTicketBody").append(str);
+            $('#divloading').css("display", "none");
         });
     }
     function DevList(url, param) {
+        $("#LoaderTicketList2").addClass("d-none");
+        $("#btnCloseDevTicketList").removeClass("d-none");
+        $("#btnCloseDevTicketList").addClass("d-block");
+        $("#tblHdrAssigned").text("");
+        $("#tblHdrAssigned").text("Assigned To");
         let txt2 = "";
         $("#tblAssignedListAll").empty();
         $.get(url, param, function (data) {
             let count2 = 1;
             data.map(function (x) {
-                console.log(x);
+                //console.log(x);
                 txt2 += "<tr>";
                 txt2 += "<td>" + count2 + "</td>";
                 txt2 += "<td>" + x.ticketNo + "</td>";
@@ -1110,18 +1578,22 @@
                 count2++;
             });
             $("#tblAssignedListAll").append(txt2);
+            //$('#divloading').css("display", "none");
         });
     }
     function DevListAdm(url) {
+        $("#LoaderTicketList2").addClass("d-none");
+        $("#btnCloseDevTicketList").removeClass("d-none");
+        $("#btnCloseDevTicketList").addClass("d-block");
         $("#tblHdrAssigned").text("");
         $("#tblHdrAssigned").text("Assigned To");
         let txt2 = "";
         $("#tblAssignedListAll").empty();
         $.get(url, function (data) {
-            console.log(data);
+            //console.log(data);
             let count2 = 1;
             data.map(function (x) {
-                console.log(x);
+                //console.log(x);
                 txt2 += "<tr>";
                 txt2 += "<td>" + count2 + "</td>";
                 txt2 += "<td>" + x.ticketNo + "</td>";
@@ -1161,6 +1633,7 @@
                 count2++;
             });
             $("#tblAssignedListAll").append(txt2);
+            $('#divloading').css("display", "none");
         });
     }
     function ShowTicketDetails(idTicket) {
@@ -1168,9 +1641,8 @@
         //$("#hdListType").val("");
         //$("#hdListType").val(listType);
         let url = "api/ticket/TicketDetail";
-        let param = { IDTicket: idTicket, RaisedBy: $("#hdEmail").val() };
-        //let param = { IDTicket: idTicket };
-        $.ajaxSetup({ async: false });
+        let param = { IDTicket: idTicket };
+        //$.ajaxSetup({ async: false });
         $.get(url, param, function (data) {
             //console.log(data);
             data.map(function (x) {
@@ -1184,11 +1656,23 @@
                 $("#lblRaisedBy").text(x.raisedBy);
                 $("#lblRaisedDate").text(x.raisedDate);
                 if (x.picturePath != "") {
-                    $("#imgTicket").removeClass("d-none");
-                    $("#imgTicket").attr('src', x.picturePath);
-                    $("#imgTicket").attr('alt', x.picturePath);
+                    let filePath = x.picturePath;
+                    const fileType = filePath.split(".");
+                    //console.log(fileType[1]);
+                    if (fileType[1] != "png" || fileType[1] != "jpg" || fileType[1] != "jpeg") {
+                        $("#btnDownloadFile").removeClass("d-none");
+                        $("#btnDownloadFile").attr("href", filePath);
+                        $("#imgTicket").addClass("d-none");
+                    }
+                    else {
+                        $("#imgTicket").removeClass("d-none");
+                        $("#btnDownloadFile").addClass("d-none");
+                        //$("#imgTicket").attr('data', x.picturePath);
+                        $("#imgTicket").attr('src', x.picturePath);
+                    }
                 }
                 else {
+                    $("#imgTicket").removeClass("d-block");
                     $("#imgTicket").addClass("d-none");
                 }
 
@@ -1249,7 +1733,7 @@
                 //For getting Developer Name
                 url = "api/ticket/DevAssignedDetails";
                 let param = { "IDTicket": x.idTicket };
-                /*$.ajaxSetup({ async: false });*/
+                //$.ajaxSetup({ async: false });
                 $.get(url, param, function (data) {
                     //console.log(data);
                     if (data.length === 0) {
@@ -1262,6 +1746,7 @@
                     }
                 });
             });
+            $('#divloading').css("display", "none");
         });
     }
     function ClearModalDetails() {
@@ -1276,8 +1761,9 @@
         $("#lblApplication").text("");
         $("#lblRaisedBy").text("");
         $("#lblRaisedDate").text("");
+        //$("#imgTicket").attr('data', "");
+        $("#imgTicket").addClass("d-none");
         $("#imgTicket").attr('src', "");
-        $("#imgTicket").attr('alt', "");
         $("#lblAssignedDev").removeClass("d-none");
         $("#btnAddAssign").removeClass("d-none");
         $("#btnAssignDev").addClass("d-none");
@@ -1288,6 +1774,7 @@
         $("#txtStatRemarks").addClass("d-none");
         $("#btnCancelStatus").addClass("d-none");
         $("#btnSaveStatus").addClass("d-none");
+        $("#btnDownloadFile").addClass("d-none");
     }
     function ShowAssignedTicketDetails(idTicket, listType) {
         //console.log(listType);
@@ -1296,7 +1783,7 @@
         let url = "api/ticket/ticketDevAllList";
         let param = { "IDTicket": idTicket };
         //let param = { IDTicket: idTicket };
-        $.ajaxSetup({ async: false });
+        //$.ajaxSetup({ async: false });
         $.get(url, param, function (data) {
             //console.log(data);
             data.map(function (x) {
@@ -1309,8 +1796,44 @@
                 $("#lblApplication").text(x.application.name);
                 $("#lblRaisedBy").text(x.raisedBy);
                 $("#lblRaisedDate").text(x.raisedDate);
-                $("#imgTicket").attr('src', x.picturePath);
-                $("#imgTicket").attr('alt', x.picturePath);
+                if (x.picturePath != "") {
+                    let filePath = x.picturePath;
+                    const fileType = filePath.split(".");
+                    //console.log(fileType[1]);
+                    if (fileType[1] == "png" || fileType[1] == "jpg" || fileType[1] == "jpeg") {
+                        $("#imgTicket").removeClass("d-none");
+                        $("#imgTicket").addClass("d-block");
+                        $("#btnDownloadFile").addClass("d-none");
+                        //$("#imgTicket").attr('data', x.picturePath);
+                        $("#imgTicket").attr('src', x.picturePath);
+                    }
+                    else {
+                        const fileName = filePath.split("/");
+                        $("#btnDownloadFile").removeClass("d-none");
+                        $("#btnDownloadFile").addClass("d-block");
+                        $("#btnDownloadFile").find("a").attr("href", filePath);
+                        $("#btnDownloadFile").find("label").text(fileName[3]);
+                        $("#imgTicket").addClass("d-none");
+                        if (fileType[1] == "pdf") {
+                            $("#btnDownloadFile").find("img").attr("src", "");
+                            $("#btnDownloadFile").find("img").attr("src", "/images/pdf 1.png");
+                        }
+                        if (fileType[1] == "doc" || fileType[1] == "docx") {
+                            $("#btnDownloadFile").find("img").attr("src", "");
+                            $("#btnDownloadFile").find("img").attr("src", "/images/word 1.png");
+                        }
+                        if (fileType[1] == "ppt" || fileType[1] == "pptx") {
+                            $("#btnDownloadFile").find("img").attr("src", "");
+                            $("#btnDownloadFile").find("img").attr("src", "/images/ppt 1.png");
+                        }
+                    }
+                }
+                else {
+                    $("#imgTicket").removeClass("d-block");
+                    $("#imgTicket").addClass("d-none");
+                }
+                //$("#imgTicket").attr('data', x.picturePath);
+                //$("#imgTicket").attr('alt', x.picturePath);
 
                 if (x.priority.name == "NORMAL") {
                     $("#lblPriority").removeClass();
@@ -1331,7 +1854,7 @@
 
                 if (x.status.name == "OPEN") {
                     $("#lblStatus").removeClass();
-                    $("#lblStatus").addClass("text-warning");
+                    $("#lblStatus").addClass("text-warning fw-bold");
                 }
                 else if (x.status.name == "CLOSE") {
                     $("#lblStatus").removeClass();
@@ -1376,6 +1899,7 @@
                     }
                 });
             });
+            //$('#divloading').css("display", "none");
         });
     }
     function TicketDashList(url, param) {
@@ -1394,9 +1918,9 @@
                 /*txt1 += "<td>" + x.ticketNo + "</td>";*/
                 txt1 += "<td>";
                 txt1 += "<div id='divIssue' style='width: 105px; position:relative;'>";
-                txt1 += "<span>" + x.ticketNo +"</span>";
-                txt1 += "<p class='mb-0' style='white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>Issue: </b>" + x.issueDesc +"</p>";
-                txt1 += "<span class='tooltip-custom'>" + x.issueDesc +"</span>";
+                txt1 += "<span>" + x.ticketNo + "</span>";
+                txt1 += "<p class='mb-0' style='white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>Issue: </b>" + x.issueDesc + "</p>";
+                txt1 += "<span class='tooltip-custom'>" + x.issueDesc + "</span>";
                 txt1 += "</div>";
                 txt1 += "</td>";
                 txt1 += "<td>" + x.raisedDate + "</td>";
@@ -1425,12 +1949,16 @@
                 if (x.status.name == "SOLVED") {
                     txt1 += "<td class='text-primary fw-bold'>" + x.status.name + "</td>";
                 }
+                if (x.status.name == "REVIEW") {
+                    txt1 += "<td class='text-info fw-bold'>" + x.status.name + "</td>";
+                }
                 txt1 += "</tr>";
                 count1++;
             })
             $("#userDashCardTable").find("#tblTicketList").append(txt1);
-            
+
             //$('#lblIssueDash').tooltip();
+            $('#divloading').css("display", "none");
         });
     }
     function TicketDashListAdm(url, param) {
@@ -1478,19 +2006,23 @@
                 if (x.status.name == "SOLVED") {
                     txt1 += "<td class='text-primary fw-bold'>" + x.status.name + "</td>";
                 }
+                if (x.status.name == "REVIEW") {
+                    txt1 += "<td class='text-info fw-bold'>" + x.status.name + "</td>";
+                }
                 txt1 += "</tr>";
                 count1++;
             })
             $("#adminDashCardTable").find("#tblTicketList").append(txt1);
+            $('#divloading').css("display", "none");
         });
     }
-    function TicketDashListDev(url,param) {
+    function TicketDashListDev(url, param) {
         let txt2 = "";
         $.get(url, param, function (data) {
             let count2 = 1;
             $("#tblAssignedList").empty();
             data.map(function (x) {
-                console.log(x);
+                //console.log(x);
                 txt2 += "<tr>";
                 txt2 += "<td>" + count2 + "</td>";
                 txt2 += "<td>";
@@ -1519,7 +2051,130 @@
                 count2++;
             })
             $("#tblAssignedList").append(txt2);
+            $('#divloading').css("display", "none");
         });
+    }
+    function TicketRecentActivities(url, param) {
+        let txt1 = "";
+        $.get(url, param, function (data) {
+            let count = 1;
+            $("#userDashCardTable").find("#tblTicketRecentActivities").empty();
+            //console.log(data);
+            data.map(function (x) {
+                //console.log(x);
+                txt1 += "<tr>";
+                txt1 += "<td>" + count + "</td>";
+                txt1 += "<td>";
+                txt1 += "<div id='divIssue' style='width: 105px; position:relative;'>";
+                txt1 += "<span>" + x.ticketNo + "</span>";
+                txt1 += "<p class='mb-0' style='white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>Issue: </b>" + x.issueDesc + "</p>";
+                txt1 += "<span class='tooltip-custom'>" + x.issueDesc + "</span>";
+                txt1 += "</div>";
+                txt1 += "</td>";
+                txt1 += "<td>" + x.raisedDate + "</td>";
+                txt1 += "<td style='width:20px'>" + x.application + "</td>";
+                if (x.priority == "NORMAL") {
+                    txt1 += "<td class='text-secondary'>" + x.priority + "</td>";
+                }
+                else if (x.priority == "URGENT") {
+                    txt1 += "<td class='text-indigo'>" + x.priority + "</td>";
+                }
+                else if (x.priority == "VERY URGENT") {
+                    txt1 += "<td class='text-danger'>" + x.priority + "</td>";
+                }
+                else if (x.priority == "ASAP") {
+                    txt1 += "<td><span class='badge text-bg-danger'>" + x.priority + "</span></td>";
+                }
+                else {
+                    txt1 += "<td>" + x.priority + "</td>";
+                }
+                if (x.status == "OPEN") {
+                    txt1 += "<td class='text-warning fw-bold'>" + x.status + "</td>";
+                }
+                else if (x.status == "CLOSE") {
+                    txt1 += "<td class='text-danger fw-bold'>" + x.status + "</td>";
+                }
+                else if (x.status == "ALLOCATED") {
+                    txt1 += "<td class='text-success fw-bold'>" + x.status + "</td>";
+                }
+                else if (x.status == "SOLVED") {
+                    txt1 += "<td class='text-primary fw-bold'>" + x.status + "</td>";
+                }
+                else if (x.status == "REVIEW") {
+                    txt1 += "<td class='text-info fw-bold'>" + x.status + "</td>";
+                }
+                else {
+                    txt1 += "<td>" + x.status + "</td>";
+                }
+                txt1 += "<td>" + x.changedBy + "</td>";
+                txt1 += "<td>" + x.changedDate + "</td>";
+                txt1 += "</tr>";
+                count++;
+            })
+            $("#userDashCardTable").find("#tblTicketRecentActivities").append(txt1);
+            $('#divloading').css("display", "none");
+        })
+    }
+    function TicketRecentActivitiesAdm(url) {
+        let txt1 = "";
+        $.get(url, function (data) {
+            let count = 1;
+            $("#adminDashCardTable").find("#tblTicketRecentActivities").empty();
+            //console.log(data);
+            data.map(function (x) {
+                //console.log(x);
+                txt1 += "<tr>";
+                txt1 += "<td>" + count + "</td>";
+                txt1 += "<td>" + x.raisedDate + "</td>";
+                txt1 += "<td>";
+                txt1 += "<div id='divIssue' style='width: 105px; position:relative;'>";
+                txt1 += "<span>" + x.ticketNo + "</span>";
+                txt1 += "<p class='mb-0' style='white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>Issue: </b>" + x.issueDesc + "</p>";
+                txt1 += "<span class='tooltip-custom'>" + x.issueDesc + "</span>";
+                txt1 += "</div>";
+                txt1 += "</td>";
+                txt1 += "<td>" + x.application + "</td>";
+                if (x.priority == "NORMAL") {
+                    txt1 += "<td class='text-secondary'>" + x.priority + "</td>";
+                }
+                else if (x.priority == "URGENT") {
+                    txt1 += "<td class='text-indigo'>" + x.priority + "</td>";
+                }
+                else if (x.priority == "VERY URGENT") {
+                    txt1 += "<td class='text-danger'>" + x.priority + "</td>";
+                }
+                else if (x.priority == "ASAP") {
+                    txt1 += "<td><span class='badge text-bg-danger'>" + x.priority + "</span></td>";
+                }
+                else {
+                    txt1 += "<td>" + x.priority + "</td>";
+                }
+                if (x.status == "OPEN") {
+                    txt1 += "<td class='text-warning fw-bold'>" + x.status + "</td>";
+                }
+                else if (x.status == "CLOSE") {
+                    txt1 += "<td class='text-danger fw-bold'>" + x.status + "</td>";
+                }
+                else if (x.status == "ALLOCATED") {
+                    txt1 += "<td class='text-success fw-bold'>" + x.status + "</td>";
+                }
+                else if (x.status == "SOLVED") {
+                    txt1 += "<td class='text-primary fw-bold'>" + x.status + "</td>";
+                }
+                else if (x.status == "REVIEW") {
+                    txt1 += "<td class='text-info fw-bold'>" + x.status + "</td>";
+                }
+                else {
+                    txt1 += "<td>" + x.status + "</td>";
+                }
+                txt1 += "<td>" + x.changedBy + "</td>";
+                txt1 += "<td>" + x.changedDate + "</td>";
+                txt1 += "</tr>";
+                count++;
+            })
+            $("#adminDashCardTable").find("#tblTicketRecentActivities").append(txt1);
+            $('#divloading').css("display", "none");
+        })
     }
 
     //Chart
@@ -1527,9 +2182,9 @@
         var chartLabel = [];
         var chartData = [];
         let url2 = "api/ticket/ticketApplicationBarAdmin";
-        $("#divBarChart").empty();
-        $("#divBarChart").append('<canvas id="myChartAdmin"></canvas>');
         $.get(url2, function (data) {
+            $("#admChart1").find("#divBarChart").empty();
+            $("#admChart1").find("#divBarChart").append('<canvas id="myChartAdmin"></canvas>');
             data.map(function (x) {
                 //console.log(x);
                 chartLabel.push(x.labelnew);
@@ -1578,6 +2233,7 @@
                     },
                 }
             });
+            $('#divloading').css("display", "none");
         });
     }
     function userBarChart() {
@@ -1586,8 +2242,8 @@
         let url = "api/ticket/ticketApplicationBar";
         let param = { "useremail": $("#hdEmail").val() }
 
-        $("#divBarChart").empty();
-        $("#divBarChart").append('<canvas id="myChart"></canvas>');
+        $("#divBarChartUser").empty();
+        $("#divBarChartUser").append('<canvas id="myChart"></canvas>');
         $.get(url, param, function (data) {
             data.map(function (x) {
                 //console.log(x);
@@ -1645,6 +2301,7 @@
                     },
                 }
             });
+            $('#divloading').css("display", "none");
         });
     }
     function devLineChart() {
@@ -1655,8 +2312,8 @@
         let url1 = "api/ticket/ticketAllocLineDev";
         let url2 = "api/ticket/ticketSolveLineDev";
         let param = { "useremail": $("#hdEmail").val() };
-        $("#divBarChart").empty();
-        $("#divBarChart").append('<canvas id="myChartDev"></canvas>');
+        $("#devDashCardTable").find("#divBarChart").empty();
+        $("#devDashCardTable").find("#divBarChart").append('<canvas id="myChartDev"></canvas>');
         $.get(url1, param, function (data) {
             data.map(function (x) {
                 //console.log(x);
@@ -1693,12 +2350,11 @@
                                 backgroundColor: [
                                     'rgba(32, 201, 151, 0.2)',
                                 ],
-                                label: 'Solved',
-                                data: chartData2,
-                                
                                 borderColor: [
                                     'rgb(32, 201, 151)',
                                 ],
+                                label: 'Solved',
+                                data: chartData2,
                                 borderWidth: 2,
                                 fill: true,
                                 //borderJoinStyle: 'round'
@@ -1713,7 +2369,7 @@
                                 //steps: 5,
                                 //stepValue: 5,
                                 //max: 50
-                                max: Math.max(...chartData2) > Math.max(...chartData1) ? Math.max(...chartData2)+5 : Math.max(...chartData1)+5,
+                                max: Math.max(...chartData2) > Math.max(...chartData1) ? Math.max(...chartData2) + 5 : Math.max(...chartData1) + 5,
                                 display: true,
                                 title: {
                                     display: true,
@@ -1747,6 +2403,7 @@
                     },
                 });
             });
+            $('#divloading').css("display", "none");
         });
     }
     function adminLineChart() {
@@ -1757,8 +2414,6 @@
         let url1 = "api/ticket/ticketOpenLineAdmin";
         let url2 = "api/ticket/ticketCloseLineAdmin";
         //let param = { "useremail": $("#hdEmail").val() };
-        $("#admChart2").find("#divBarChart").empty();
-        $("#admChart2").find("#divBarChart").append('<canvas id="myChartAdm"></canvas>');
         $.get(url1, function (data) {
             data.map(function (x) {
                 //console.log(x);
@@ -1766,6 +2421,8 @@
                 chartData1.push(x.valuenew);
             });
             $.get(url2, function (data) {
+                $("#admChart2").find("#divBarChart").empty();
+                $("#admChart2").find("#divBarChart").append('<canvas id="myChartAdm"></canvas>');
                 data.map(function (y) {
                     //console.log(x);
                     chartLabel2.push(y.labelnew);
@@ -1855,6 +2512,7 @@
                     },
                 });
             });
+            $('#divloading').css("display", "none");
         });
     }
 });

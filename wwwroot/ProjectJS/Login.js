@@ -18,8 +18,8 @@
     });
 
     $("#btnEmpReg").click(function () {
-        let param = { empemail: $("#txtEmpEmail"), Empname: $("#txtEmpName"), Password: $("#txtEmpPass") };
-        let url = "api/ticket/ResgisterEmp";
+        let param = { empemail: $("#txtEmpEmail").val(), Empname: $("#txtEmpName").val(), Password: $("#txtEmpPass").val() };
+        let url = "api/login/ResgisterEmp";
 
         $.ajax({
             url: url,
@@ -43,24 +43,34 @@
             let password = $("#txtPassword").val();
             let url = "api/login/validlogin";
             let info = {
-                "Uname": uname,
-                "pwd": password
+                empemail: uname,
+                Password: password
             }
-            $.ajax({
-                url: url,
-                type: "POST",
-                data:info,
-                success: function (result) {
-                    //console.log(result);
-                    if (result[0].truefalse === true ) {
-                        /*location.href = "Ticket";*/
-                        location.href = "Dashboard";
-                    }
-                    else {
-                        location.href = "login";
-                    }
+            //$.ajax({
+            //    url: url,
+            //    type: "POST",
+            //    data:info,
+            //    success: function (result) {
+            //        //console.log(result);
+            //        if (result[0].truefalse === true ) {
+            //            /*location.href = "Ticket";*/
+            //            location.href = "Dashboard";
+            //        }
+            //        else {
+            //            location.href = "login";
+            //        }
+            //    }
+            //});
+            $.get(url, info, function (data, status, xhr, dataType) {
+                //console.log(data, dataType);
+                if (data.includes("Invalid Credentials") == true) {
+                    alert(data);
+                    location.href = "login";
                 }
-            });
+                else {
+                    location.href = "Dashboard";
+                }
+            })
         }
     });
     function validtion() {

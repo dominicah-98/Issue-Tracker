@@ -40,9 +40,10 @@
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
-*:focus {
-    outline: none;
-}
+
+    *:focus {
+        outline: none;
+    }
 
 body {
     padding: 0;
@@ -79,7 +80,8 @@ a {
     input[type=time]:focus,
     input[type=submit]:focus,
     input[type=button]:focus,
-    .form-check-input:focus {
+    .form-check-input:focus,
+    .form-control:focus {
         outline: none !important;
         box-shadow: none !important;
     }
@@ -106,8 +108,8 @@ a {
     }
 
 
-.bg-blue-light{
-    background-color:var(--blue-lightest);
+.bg-blue-light {
+    background-color: var(--blue-lightest);
 }
 
 .btn {
@@ -120,38 +122,42 @@ a {
     /* color: var(--black); */
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-dark);
-    border: 1px solid var(--primary-dark);
-}
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border: 1px solid var(--primary-dark);
+    }
 
-.text-primary{
+.text-primary {
     color: var(--primary) !important;
     transition: all 0.2s;
 }
 
-.text-warning{
+.text-warning {
     color: var(--orange) !important;
 }
-.text-success{
+
+.text-success {
     color: var(--teal) !important;
 }
-.text-secondary{
+
+.text-secondary {
     color: var(--grey) !important;
 }
-.text-primary.pointer:hover{
+
+.text-primary.pointer:hover {
     color: var(--primary-dark) !important;
     transition: 0.2s ease-in-out
 }
 
-.text-indigo{
-    color:var(--indigo);
-}
-i{
-    cursor:pointer;
+.text-indigo {
+    color: var(--indigo);
 }
 
-.pointer{
+i {
+    cursor: pointer;
+}
+
+.pointer {
     cursor: pointer;
 }
 
@@ -165,6 +171,7 @@ i{
     font-size: var(--font-size);
     transition: all 0.2s;
 }
+
 .form-check-input:focus-visible {
     border-color: var(--primary) !important;
     transition: 0.2s linear;
@@ -203,6 +210,7 @@ textarea {
     border: 1px solid var(--grey-light);
     transition: all 0.2s;
 }
+
 .ticket-card-icon {
     position: absolute;
     bottom: -15px;
@@ -212,6 +220,7 @@ textarea {
     opacity: 0.07;
     /*transform: rotate(20deg);*/
 }
+
 .bi::before {
     vertical-align: -1.125em !important;
 }
@@ -234,17 +243,17 @@ textarea {
     -webkit-font-smoothing: antialiased;
 }
 
-.calendar-icon:before {
-    content: "\f073"; /* this is your text. You can also use UTF-8 character codes as I do here */
-    /*font-family: FontAwesome;*/
-    font: var(--fa-font-regular);
-    right: 10px;
-    position: absolute;
-    top: 50%;
-    transform:translateY(-50%);
-    color: var(--primary);
-    font-size: 16px;
-}
+    .calendar-icon:before {
+        content: "\f073"; /* this is your text. You can also use UTF-8 character codes as I do here */
+        /*font-family: FontAwesome;*/
+        font: var(--fa-font-regular);
+        right: 10px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary);
+        font-size: 16px;
+    }
 
 /*Tooltip Customization*/
 .tooltip-custom {
@@ -305,3 +314,88 @@ textarea {
     opacity: 1;
     transition: 0.3s ease;
 }
+
+
+/*Ticket List Modal*/
+/*@media (min-width: 1200px) {
+
+}*/
+#ModalTicketDetail .modal-xl, #ModalDeveloperList .modal-xl {
+    --bs-modal-width: 100% !important;
+    margin: 20px !important;
+    height: 93.5vh !important;
+}
+
+#ModalTicketDetail .modal-content, #ModalDeveloperList .modal-content {
+    height: 97vh !important;
+}
+
+.overlay1, .overlay2 {
+    background-color: rgba(0,0,0,0.5);
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    z-index: 1000000000;
+    /*filter: blur(2px);*/
+    backdrop-filter: blur(2px)
+}
+
+.ModalTicketImg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 100000000000000000;
+}
+
+.divFile {
+    width: 140px;
+    height: 160px;
+}
+
+/*Loader*/
+#divloading {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    background-color: rgba(255,255,255,0.7);
+    z-index: 1056;
+}
+
+#imgLoading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1021;
+}
+
+/*SearchBar*/
+.ui-widget.ui-widget-content {
+    z-index: 10000;
+}
+
+.form-control.ui-autocomplete-input {
+    border: none !important;
+}
+
+.ui-widget {
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+    .ui-widget:hover {
+        border: 1.5px solid var(--primary-light) !important;
+        transition: 0.2s linear;
+    }
+
+    .ui-widget i {
+        cursor: default;
+    }
+/*.form-control.ui-autocomplete-input:focus-visible .ui-widget {
+    border: 1.5px solid var(--primary) !important;
+    transition: 0.2s linear;
+}*/

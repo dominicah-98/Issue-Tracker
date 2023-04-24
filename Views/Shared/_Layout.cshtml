@@ -9,7 +9,7 @@
     <link href="~/bootstrap-5.2.3-dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="~/bootstrap-5.2.3-dist/js/bootstrap.min.js"></script>
     @*Fontawesome Icon*@
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @*<link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />*@
     @*Bootstrap Icon*@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -20,8 +20,14 @@
     @*<link href="~/Custom-Css/Ticket.css" rel="stylesheet" />*@
     <link href="~/Custom-Css/Ticket.css" rel="stylesheet" />
     <script src="~/Custom-js/style.js"></script>
+    @*<script src="~/ProjectJS/Dashboard.js"></script>*@
     @*Chart js*@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @*jQuery Autocomplete*@
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.js" integrity="sha512-TToQDr91fBeG4RE5RjMl/tqNAo35hSRR4cbIFasiV2AAMQ6yKXXYhdSdEpUcRE6bqsTiB+FPLPls4ZAFMoK5WA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.css" integrity="sha512-TfnGOYsHIBHwx3Yg6u6jCWhqz79osu5accjEmw8KYID9zfWChaGyjDCmJIdy9fJjpvl9zXxZamkLam0kc5p/YQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />*@
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js" integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
 </head>
@@ -32,15 +38,26 @@
                 @*<h2>QUICKDESK</h2>*@
                 <img src="~/images/logo2.png" />
             </div>
+            @*<div class="col-md-8 d-flex justify-content-end align-items-center">
+
+            </div>*@
             <div class="col-md-8 d-flex justify-content-end align-items-center">
-                <div class="d-flex justify-content-end align-items-center pe-2">
+                @*<label id="lblPortal" class="text-primary d-block pointer pe-2">Go back to Portal</label>*@
+                @*<div class="wrapper">
+                <div id="search-form"></div>
+                </div>*@
+                <div class="ui-widget me-3 d-flex align-items-center ps-2 rounded">
+                    <i class="fa-solid fa-magnifying-glass fa-lg me-2"></i>
+                    <input id="txtSearchBar" class="form-control form-control-sm" placeholder="Search By Ticket No.">
+                </div>
+                <div class="d-flex justify-content-end align-items-center px-2 border-start">
                     <label class="d-block fw-bold" id="lblSwitchUser">User</label>
                     <div class="form-check form-switch mx-1">
-                        <input class="form-check-input" type="checkbox" id="chkSwitch">
+                        <input class="form-check-input pointer" type="checkbox" id="chkSwitch">
                     </div>
                     <label class="d-block small" id="lblSwitch"></label>
                 </div>
-                <div class="ps-2 border-start">
+                <div class="ps-2 py-1 border-start">
                     <label id="lblEmpname" class="fw-bold">@Context.Session.GetString("Empname")</label>
                     <label id="lblEmpno" class="fw-bold">(@Context.Session.GetString("Empno"))</label>
                     @*<input type="button" id="btnLogout" class="btn btn-sm btn-warning" value="Logout" />*@
@@ -50,24 +67,26 @@
         </div>
         @*<div class="row justify-content-center mt-5">
         <div class="col-md-11">
-            @RenderBody()
+        @RenderBody()
         </div>*@
-    <div class="container-fluid p-3 mt-3">
-        <div class="row">
-            <div class="col-md-12">
-                @RenderBody()
+        <div class="container-fluid p-3 mt-3">
+            <div class="row">
+                <div class="col-md-12">
+                    @RenderBody()
+                </div>
             </div>
         </div>
-    </div>
-    <footer>
-        <div>
-            <input type="hidden" id="hdEmail" value="@Context.Session.GetString("Email")" />
-            <input type="hidden" id="hdEmpno" value="@Context.Session.GetString("Empno")" />
-            <input type="hidden" id="hdEmpname" value="@Context.Session.GetString("Empname")" />
-            <input type="hidden" id="hdEmpType" value="" />
-            <input type="hidden" id="hdDashType" value="" />
-        </div>
-    </footer>
+        <footer>
+            <div>
+                <input type="hidden" id="hdEmail" value="@Context.Session.GetString("Email")" />
+                <input type="hidden" id="hdEmpno" value="@Context.Session.GetString("Empno")" />
+                <input type="hidden" id="hdEmpname" value="@Context.Session.GetString("Empname")" />
+                <input type="hidden" id="hdPortal" value="@Context.Session.GetString("Portal")" />
+                <input type="hidden" id="hdURL" value="@Context.Session.GetString("PortalURL")" />
+                <input type="hidden" id="hdEmpType" value="" />
+                <input type="hidden" id="hdDashType" value="" />
+            </div>
+        </footer>
     </div>
 </body>
 </html>

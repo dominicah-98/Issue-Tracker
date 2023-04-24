@@ -66,19 +66,18 @@ namespace QuickDesk.BLL
             return mList;
         }
 
-        public static List<clsEmpInfo> Employee_List(String Con)
+        public static List<clsLoginResultInfo> Employee_List(String Con)
         {
-            List<clsEmpInfo> mlist = new List<clsEmpInfo>();
-            DataTable DT = clsDatabase.fnDataTable(Con, "PRC_Survey_Employee_List");
+            List<clsLoginResultInfo> mlist = new List<clsLoginResultInfo>();
+            //DataTable DT = clsDatabase.fnDataTable(Con, "PRC_Survey_Employee_List");
+            DataTable DT = clsDatabase.fnDataTable(Con, "PRC_Ticket_UserDetails");
             foreach (DataRow dr in DT.Rows)
             {
-                clsEmpInfo obj = new clsEmpInfo();
-                obj.empno = (Int32)dr["empno"];
-                obj.empdept = (Int32)dr["empdept"];
-                obj.empfirstname = (String)dr["empfirstname"];
-                obj.empmiddlename = (String)dr["empmiddlename"];
-                obj.emplastname = (String)dr["emplastname"];
-                obj.empemail = dr["empemail"].ToString();
+                clsLoginResultInfo obj = new clsLoginResultInfo();
+                obj.empno = (Int64)dr["IDUser"];
+                obj.Empname = (String)dr["EmpName"];
+                obj.empemail = dr["UserEmail"].ToString();
+                obj.Truefalse = (bool)dr["IsActive"];
                 mlist.Add(obj);
             }
             return mlist;
@@ -90,5 +89,27 @@ namespace QuickDesk.BLL
                                             info.empemail, info.Empname, info.Password);
 
         }
+
+        public static String Ticket_EmpLogin(string connection, clsLoginResultInfo info)
+        {
+            return clsDatabase.fnDBOperation(connection, "PRC_Ticket_Login", info.empemail, info.Password);
+        }
+        //public static List<clsLoginResultInfo> Ticket_Employee_Details(String Con)
+        //{
+        //    List<clsLoginResultInfo> mlist = new List<clsLoginResultInfo>();
+        //    DataTable DT = clsDatabase.fnDataTable(Con, "PRC_Ticket_UserDetails");
+        //    foreach (DataRow dr in DT.Rows)
+        //    {
+        //        clsLoginResultInfo obj = new clsLoginResultInfo();
+        //        obj.empno = (Int32)dr["empno"];
+        //        obj.empdept = (Int32)dr["empdept"];
+        //        obj.empfirstname = (String)dr["empfirstname"];
+        //        obj.empmiddlename = (String)dr["empmiddlename"];
+        //        obj.emplastname = (String)dr["emplastname"];
+        //        obj.empemail = dr["empemail"].ToString();
+        //        mlist.Add(obj);
+        //    }
+        //    return mlist;
+        //}
     }
 }

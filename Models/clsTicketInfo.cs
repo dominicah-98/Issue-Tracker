@@ -13,7 +13,7 @@
         public string ClosedBy { get; set; } = "";
         public clsMiscInfo Category { get; set; } = new clsMiscInfo();
         public clsMiscInfo Priority { get; set; } = new clsMiscInfo();
-        public clsMiscInfo Status { get;}= new clsMiscInfo();
+        public clsMiscInfo Status { get; } = new clsMiscInfo();
         public clsMiscInfo Application { get; set; } = new clsMiscInfo();
         public clsStatusRemarksInfo Remarks { get; set; } = new clsStatusRemarksInfo();
 
@@ -53,5 +53,18 @@
         public string Application { get; set; } = "";
         public long IDCat { get; set; } = 0;
         public string Category { get; set; } = "";
+    }
+    public class clsTempTicketRecentActivities
+    {
+        public long IDTicket { get; set; } = 0;
+        public string TicketNo { get; set; } = "";
+        public string IssueDesc { get; set; } = "";
+        public string Application { get; set; } = "";
+        public string RaisedBy { get; set; } = "";
+        public string RaisedDate { get; set; } = "";
+        public string Priority { get; set; } = "";
+        public string Status { get; set; } = "";
+        public string ChangedBy { get; set; } = "";
+        public string ChangedDate { get; set; } = "";
     }
 }

@@ -10,7 +10,7 @@
         //public String designationshortform { get; set; } = "";
         public String Empname { get; set; } = "";
         //public String HQ { get; set; } = "";
-        public Boolean Truefalse { get; set; } = true;
+        public Boolean Truefalse { get; set; } = false;
         public String Password { get; set; } = "";
         //public long IDCycleGroup { get; set; } = 0;
     }

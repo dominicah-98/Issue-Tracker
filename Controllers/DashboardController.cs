@@ -4,6 +4,7 @@ using QuickDesk.BLL;
 using QuickDesk.Models;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace QuickDesk.Controllers
 {
@@ -18,6 +19,14 @@ namespace QuickDesk.Controllers
         }
         public IActionResult Index()
         {
+            //if (!String.IsNullOrEmpty(HttpContext.Session.GetString("Email")) && !String.IsNullOrEmpty(HttpContext.Session.GetString("Empno")) && !String.IsNullOrEmpty(HttpContext.Session.GetString("Empname")) && !String.IsNullOrEmpty(HttpContext.Session.GetString("Portal")) && !String.IsNullOrEmpty(HttpContext.Session.GetString("PortalURL")))
+            //{
+            //    return View();
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Connection");
+            //}
             return View();
         }
 
@@ -67,7 +76,7 @@ namespace QuickDesk.Controllers
         {
             var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
             List<clsTicketInfo> mlist = clsTicket.Ticket_List_All(conn);
-            var count = mlist.Where(x => x.RaisedBy == username && x.Status.Name == "OPEN" ).Count();
+            var count = mlist.Where(x => x.RaisedBy == username && x.Status.Name == "OPEN").Count();
             return new JsonResult(count);
         }
         [HttpGet]
@@ -86,6 +95,43 @@ namespace QuickDesk.Controllers
             var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
             List<clsTicketInfo> mlist = clsTicket.Ticket_List_All(conn);
             var result = mlist.Where(x => x.RaisedBy == username && x.Status.Name == "OPEN");
+            return new JsonResult(result);
+        }
+        [HttpGet]
+        [Route("api/ticket/ticketreview")]
+        public JsonResult Ticket_Review_No(string username)
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTicketInfo> mlist = clsTicket.Ticket_List_All(conn);
+            var result = mlist.Where(x => x.RaisedBy == username && x.Status.Name == "REVIEW").Count();
+            return new JsonResult(result);
+        }
+        [HttpGet]
+        [Route("api/ticket/ticketreviewList")]
+        public JsonResult Ticket_Review_List(string username)
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTicketInfo> mlist = clsTicket.Ticket_List_All(conn);
+            var result = mlist.Where(x => x.RaisedBy == username && x.Status.Name == "REVIEW");
+            return new JsonResult(result);
+        }
+        [HttpGet]
+        [Route("api/ticket/ticketallocated")]
+        public JsonResult Ticket_Allocated_No(string username)
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTicketInfo> mlist = clsTicket.Ticket_List_All(conn);
+            var count = mlist.Where(x => x.RaisedBy == username && x.Status.Name == "ALLOCATED").Count();
+            return new JsonResult(count);
+        }
+        [HttpGet]
+        [Route("api/ticket/ticketallocatedList")]
+        public JsonResult Ticket_Allocated_List(string username)
+        {
+            //username= HttpContext.Session.GetString("Email");
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTicketInfo> mlist = clsTicket.Ticket_List_All(conn);
+            var result = mlist.Where(x => x.RaisedBy == HttpContext.Session.GetString("Email") && x.Status.Name == "ALLOCATED");
             return new JsonResult(result);
         }
         [HttpGet]
@@ -142,6 +188,16 @@ namespace QuickDesk.Controllers
             var result = mlist.Where(x => x.RaisedBy == username && x.Status.Name == "CLOSE");
             return new JsonResult(result);
         }
+        [HttpGet]
+        [Route("api/ticket/ticketRecentActivitiesUser")]
+        public JsonResult Ticket_Recent_Activities_User(string username)
+        {
+            username = Regex.Replace(username, @"\s+", " ");
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTempTicketRecentActivities> mlist = clsTicket.Ticket_Recent_Activities(conn);
+            var result = mlist.Where(x => x.RaisedBy == username).Take(4);
+            return new JsonResult(result);
+        }
 
         //Developer Dashboard Cards and table
         [HttpGet]
@@ -161,7 +217,7 @@ namespace QuickDesk.Controllers
             var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
             List<clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
             //var count = result.Count();
-            var count = mlist.Where(x => x.AllocatedToMail == useremail).Take(4);
+            var count = mlist.Where(x => x.AllocatedToMail == useremail).Take(5);
             return new JsonResult(count);
         }
         [HttpGet]
@@ -321,6 +377,42 @@ namespace QuickDesk.Controllers
             return new JsonResult(result);
         }
         [HttpGet]
+        [Route("api/ticket/ticketlistAllocAdminNo")]
+        public JsonResult Ticket_List_Alloc_Admin_No(string username)
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTicketInfo> mlist = clsTicket.Ticket_List(conn, username);
+            var result = mlist.Where(x => x.Status.Name == "ALLOCATED").Count();
+            return new JsonResult(result);
+        }
+        [HttpGet]
+        [Route("api/ticket/ticketlistAllocAdminList")]
+        public JsonResult Ticket_List_Alloc_Admin_List(string username)
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTicketInfo> mlist = clsTicket.Ticket_List(conn, username);
+            var result = mlist.Where(x => x.Status.Name == "ALLOCATED");
+            return new JsonResult(result);
+        }
+        [HttpGet]
+        [Route("api/ticket/ticketlistReviewAdminNo")]
+        public JsonResult Ticket_List_Review_Admin_No(string username)
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTicketInfo> mlist = clsTicket.Ticket_List(conn, username);
+            var result = mlist.Where(x => x.Status.Name == "REVIEW").Count();
+            return new JsonResult(result);
+        }
+        [HttpGet]
+        [Route("api/ticket/ticketlistReviewAdminList")]
+        public JsonResult Ticket_List_Review_Admin_List(string username)
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTicketInfo> mlist = clsTicket.Ticket_List(conn, username);
+            var result = mlist.Where(x => x.Status.Name == "REVIEW");
+            return new JsonResult(result);
+        }
+        [HttpGet]
         [Route("api/ticket/ticketlistSolvedAdminDashNo")]
         public JsonResult Ticket_List_Solved_Admin_No(string username)
         {
@@ -379,57 +471,9 @@ namespace QuickDesk.Controllers
         public JsonResult Ticket_AllocList_Adm()
         {
             var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            var result = clsAdminUser.Assigned_Ticket_List(conn);
+            List<clsTempAssignedTickets> mList = clsAdminUser.Assigned_Ticket_List(conn);
             //var count = result.Count();
-            //var count = mlist.Where(x => x.AllocatedToMail == useremail);
-            return new JsonResult(result);
-        }
-
-
-
-        [HttpGet]
-        [Route("api/ticket/ticketallocated")]
-        public JsonResult Ticket_Allocated_No(string username)
-        {
-            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            List <clsTicketInfo> mlist = clsTicket.Ticket_List(conn, username);
-            var count = mlist.Where(x => x.Status.Name == "ALLOCATED").Count();
-            return new JsonResult(count);
-        }
-        [HttpGet]
-        [Route("api/ticket/ticketallocatedList")]
-        public JsonResult Ticket_Allocated_List(string username)
-        {
-            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            List <clsTicketInfo> mlist = clsTicket.Ticket_List(conn, username);
-            var result = mlist.Where(x => x.Status.Name == "ALLOCATED");
-            return new JsonResult(result);
-        }
-        [HttpGet]
-        [Route("api/ticket/ticketsolvedList")]
-        public JsonResult Ticket_Solved_List_Dev(string username)
-        {
-            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            List <clsTicketInfo> mlist = clsTicket.Ticket_List(conn, username);
-            var result = mlist.Where(x => x.Status.Name == "SOLVED");
-            return new JsonResult(result);
-        }
-        [HttpGet]
-        [Route("api/ticket/ticketAssigned")]
-        public JsonResult Ticket_Assigned_List()
-        {
-            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            List <clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
-            var result = mlist.Take(4);
-            return new JsonResult(result);
-        }
-        [HttpGet]
-        [Route("api/ticket/ticketAssignedListAll")]
-        public JsonResult Ticket_Assigned_List_All()
-        {
-            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            var result = clsAdminUser.Assigned_Ticket_List(conn);
-            //var result = mlist.Take(4);
+            var result = mList.Where(x => x.Status == "ALLOCATED");
             return new JsonResult(result);
         }
         [HttpGet]
@@ -438,48 +482,21 @@ namespace QuickDesk.Controllers
         {
             var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
             List<clsTicketInfo> mlist = clsTicket.Ticket_List_All(conn);
-            var result = mlist.Where(x=>x.IDTicket==IDTicket);
+            var result = mlist.Where(x => x.IDTicket == IDTicket);
+            return new JsonResult(result);
+        }
+        [HttpGet]
+        [Route("api/ticket/ticketRecentActivitiesAdm")]
+        public JsonResult Ticket_Recent_Activities_Admin()
+        {
+            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+            List<clsTempTicketRecentActivities> mlist = clsTicket.Ticket_Recent_Activities(conn);
+            var result = mlist.Take(4);
             return new JsonResult(result);
         }
 
-        
-        //[HttpGet]
-        //[Route("api/ticket/ticketopenDev")]
-        //public JsonResult Ticket_OpenDev_No()
-        //{
-        //    var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-        //    List<clsTicketInfo> mlist = clsTicket.Ticket_List_Dev_Dashboard(conn);
-        //    var count = mlist.Where(x => x.Status.Name == "OPEN").Count();
-        //    return new JsonResult(count);
-        //}
 
-        [HttpGet]
-        [Route("api/ticket/ticketAssignedPerDev")]
-        public JsonResult Ticket_AssignedPerDev_List(string username)
-        {
-            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            List<clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
-            var result = mlist.Where(x=> x.AllocatedToMail==username).Take(4);
-            return new JsonResult(result);
-        }
-        [HttpGet]
-        [Route("api/ticket/ticketAssignedPerDevAll")]
-        public JsonResult Ticket_AssignedPerDev_List_All(string username)
-        {
-            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            List<clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
-            var result = mlist.Where(x=> x.AllocatedToMail==username);
-            return new JsonResult(result);
-        }
-        [HttpGet]
-        [Route("api/ticket/ticketAssignedPerDevAlloc")]
-        public JsonResult Ticket_AssignedPerDev_List_Alloc(string username)
-        {
-            var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
-            List<clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
-            var result = mlist.Where(x=> x.AllocatedToMail==username);
-            return new JsonResult(result);
-        }
+        //Ticket Save & Status Change
         [HttpPost]
         [Route("api/ticket/ticketsaveDash")]
         public JsonResult Ticket_Save(clsTicketInfo info, IFormFile File, string changedBy)
@@ -522,9 +539,9 @@ namespace QuickDesk.Controllers
 
             string DevEmailStatus = "";
             //Ticket Raise by details
-            List<clsEmpInfo> mlist = clsAdminUser.Employee_List(conn);
+            List<clsLoginResultInfo> mlist = clsAdminUser.Employee_List(conn);
             var RaisedByDtls = mlist.Where(x => x.empemail == info.RaisedBy).ToList();
-            var raisedbyName = RaisedByDtls[0].empfirstname + " " + RaisedByDtls[0].empmiddlename + " " + RaisedByDtls[0].emplastname;
+            var raisedbyName = RaisedByDtls[0].Empname;// + " " + RaisedByDtls[0].empmiddlename + " " + RaisedByDtls[0].emplastname;
             //Status changed by details
             List<clsUserInfo> mlist2 = clsAdminUser.Admin_Dev_List(conn);
             var AdminDtls = mlist2.Where(x => x.Email == changedBy).ToList();
@@ -575,6 +592,8 @@ namespace QuickDesk.Controllers
 
             return new JsonResult(result);
         }
+
+        //Misc
         [HttpGet]
         [Route("api/ticket/ticketno")]
         public JsonResult Ticket_No()
@@ -640,7 +659,6 @@ namespace QuickDesk.Controllers
             var result = mlist.Where(x => x.IDTicket == info.IDTicket).ToList();
             return new JsonResult(result);
         }
-
         [HttpGet]
         [Route("api/ticket/DevAssignedDetails")]
         public JsonResult Ticket_Assigned_Dev_Details(long IDTicket)
@@ -650,7 +668,6 @@ namespace QuickDesk.Controllers
             var result = mlist.Where(x => x.IDTicket == IDTicket);
             return new JsonResult(result);
         }
-
         [HttpPost]
         [Route("api/ticket/DevAssign")]
         public JsonResult Ticket_Dev_Assign(clsDevAssign info, string sessionUName, string raisedBy, string appName)
@@ -699,7 +716,6 @@ namespace QuickDesk.Controllers
                 return new JsonResult(result);
             }
         }
-
         [HttpGet]
         [Route("api/ticket/StatusRemarks")]
         public JsonResult Ticket_Status_Remarks(long IDTicket, string Status)
@@ -709,7 +725,6 @@ namespace QuickDesk.Controllers
             var result = mlist.Where(x => x.IDTicket == IDTicket && x.StatusName==Status);
             return new JsonResult(result);
         }
-
         [HttpGet]
         [Route("api/ticket/ApplicationCategoryMap")]
         public JsonResult Ticket_Application_Category_Map(int Application)
@@ -770,5 +785,75 @@ namespace QuickDesk.Controllers
             var result = clsChart.Chart_Close_Admin(conn);
             return new JsonResult(result);
         }
+
+
+
+
+        //[HttpGet]
+        //[Route("api/ticket/ticketsolvedList")]
+        //public JsonResult Ticket_Solved_List_Dev(string username)
+        //{
+        //    var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+        //    List <clsTicketInfo> mlist = clsTicket.Ticket_List(conn, username);
+        //    var result = mlist.Where(x => x.Status.Name == "SOLVED");
+        //    return new JsonResult(result);
+        //}
+        //[HttpGet]
+        //[Route("api/ticket/ticketAssigned")]
+        //public JsonResult Ticket_Assigned_List()
+        //{
+        //    var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+        //    List <clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
+        //    var result = mlist.Take(4);
+        //    return new JsonResult(result);
+        //}
+        //[HttpGet]
+        //[Route("api/ticket/ticketAssignedListAll")]
+        //public JsonResult Ticket_Assigned_List_All()
+        //{
+        //    var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+        //    var result = clsAdminUser.Assigned_Ticket_List(conn);
+        //    //var result = mlist.Take(4);
+        //    return new JsonResult(result);
+        //}
+
+
+        //[HttpGet]
+        //[Route("api/ticket/ticketopenDev")]
+        //public JsonResult Ticket_OpenDev_No()
+        //{
+        //    var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+        //    List<clsTicketInfo> mlist = clsTicket.Ticket_List_Dev_Dashboard(conn);
+        //    var count = mlist.Where(x => x.Status.Name == "OPEN").Count();
+        //    return new JsonResult(count);
+        //}
+
+        //[HttpGet]
+        //[Route("api/ticket/ticketAssignedPerDev")]
+        //public JsonResult Ticket_AssignedPerDev_List(string username)
+        //{
+        //    var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+        //    List<clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
+        //    var result = mlist.Where(x=> x.AllocatedToMail==username).Take(4);
+        //    return new JsonResult(result);
+        //}
+        //[HttpGet]
+        //[Route("api/ticket/ticketAssignedPerDevAll")]
+        //public JsonResult Ticket_AssignedPerDev_List_All(string username)
+        //{
+        //    var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+        //    List<clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
+        //    var result = mlist.Where(x=> x.AllocatedToMail==username);
+        //    return new JsonResult(result);
+        //}
+        //[HttpGet]
+        //[Route("api/ticket/ticketAssignedPerDevAllAlloc")]
+        //public JsonResult Ticket_AssignedPerDev_List_Alloc(string username)
+        //{
+        //    var conn = this.configuration.GetConnectionString("QuickDeskAdmin");
+        //    List<clsTempAssignedTickets> mlist = clsAdminUser.Assigned_Ticket_List(conn);
+        //    var result = mlist.Where(x=> x.AllocatedToMail==username);
+        //    return new JsonResult(result);
+        //}
     }
 }
